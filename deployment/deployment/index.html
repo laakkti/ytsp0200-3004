@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<title>Deployment - ytsp0200-3004 Backend for NDVI demo for agriculture</title>
+<link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet"/>
+<link href="../../css/font-awesome-4.7.0.css" rel="stylesheet"/>
+<link href="../../css/base.css" rel="stylesheet"/>
+<link href="../../css/highlight.css" rel="stylesheet"/>
+<link href="../../style.css" rel="stylesheet"/>
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+<script src="../../js/jquery-3.2.1.min.js"></script>
+<script src="../../js/bootstrap-3.3.7.min.js"></script>
+<script src="../../js/highlight.pack.js"></script>
+<base target="_top"/>
+<script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Deployment", url: "#_top", children: [
+              {title: "The idea", url: "#the-idea" },
+              {title: "Dockerfile", url: "#dockerfile" },
+              {title: "Container Registry", url: "#container-registry" },
+              {title: "Building the Docker Image", url: "#building-the-docker-image" },
+              {title: "Deploying to Azure", url: "#deploying-to-azure" },
+              {title: "Azure Web App", url: "#azure-web-app" },
+              {title: "Continuous Deployment", url: "#continuous-deployment" },
+              {title: "Updating changes", url: "#updating-changes" },
+              {title: "Testing Docker image in local on Docker Desktop", url: "#testing-docker-image-in-local-on-docker-desktop" },
+          ]},
+          {title: "Pipeline", url: "#pipeline", children: [
+              {title: "Creating a pipeline", url: "#creating-a-pipeline" },
+              {title: "azure-pipelines.yml", url: "#azure-pipelinesyml" },
+              {title: "The result", url: "#the-result" },
+          ]},
+        ];
+
+    </script>
+<script src="../../js/base.js"></script>
+</meta></head>
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+<div class="container-fluid wm-page-content">
+<a name="_top"></a>
+<h2 id="deployment">Deployment</h2>
+<p>In this case the app is deployed to Azure webservice as an container.
+now the MERN Stack runs on container in Azure web service...</p>
+<p>!!!! frontend lisätään build ja serverille static asetus</p>
+<p>HUOM selaimessa PWA asennus</p>
+<p>LISÄÄÄ
+frontend
+build folder to the root of the server code</p>
+<p>app.js</p>
+<p><code>app.use(express.static("build"));</code></p>
+<p>// If the URL contains 'login' or 'register', pass without token validation
+  if (url === '/' || url.includes('login') || url.includes('register')) {
+      return next();
+  }</p>
+<h3 id="the-idea">The idea</h3>
+<p>The idea is containerize an application </p>
+<p>(Azure web app container /-register)</p>
+<p><img alt="image 1" src="../../img/docker.jpg" width="300"/></p>
+<p><img alt="image 1" src="../../img/docker2.jpg" width="300"/></p>
+<p>https://portal.azure.com/</p>
+<p>laakkti@outlook.com
+https://portal.azure.com/#@laakktioutlook.onmicrosoft.com/resource/subscriptions/08680159-3a33-4f02-a0f1-1b648e13f8a5/resources</p>
+<p>tähän vois tulla anmation gif koko jutusta</p>
+<h3 id="dockerfile">Dockerfile</h3>
+<pre><code>FROM node:18
+COPY . . 
+RUN npm install
+CMD ["npm", "start"]
+</code></pre>
+<h4 id="dockerignore">.dockerignore</h4>
+<p>.node_modules</p>
+<h3 id="container-registry">Container Registry</h3>
+<p><img alt="image 1" src="../../img/registry_1.png" width="300"/>
+<img alt="image 1" src="../../img/registry_2.png" width="300"/>
+<img alt="image 1" src="../../img/registry_3.png" width="300"/></p>
+<p>Registry name (Username): ndvireg 
+Login server: ndvireg.azurecr.io
+password:  Tm9qFwxVD4/DSPi3LmEomsuvW9NDOUlb8f1/Rtp7t3+ACRApVSqe
+password2: 7+aJFEG6LSKQYgic1rueERF7FKEtCHsfgHUy1FqfUM+ACRCBU4qY</p>
+<pre><code>docker login ndvireg.azurecr.io
+Username: ndvireg
+Password: Tm9qFwxVD4/DSPi3LmEomsuvW9NDOUlb8f1/Rtp7t3+ACRApVSqe
+</code></pre>
+<p><img alt="image 1" src="../../img/registry_4.png" width="300"/></p>
+<h3 id="building-the-docker-image">Building the Docker Image</h3>
+<pre><code>docker build -t ndvireg.azurecr.io/ndvidemo:latest .
+</code></pre>
+<p>with command </p>
+<pre><code>docker images
+</code></pre>
+<p>can be seen that image is really created</p>
+<h3 id="deploying-to-azure">Deploying to Azure</h3>
+<p>To push the image from your local to the Azure Container Registry</p>
+<pre><code>docker push ndvireg.azurecr.io/ndvidemo:latest
+</code></pre>
+<p><img alt="image 1" src="../../img/registry_5.png" width="300"/></p>
+<p><img alt="image 1" src="../../img/registry_6.png" width="300"/></p>
+<h3 id="azure-web-app">Azure Web App</h3>
+<p>Hosting the container from register</p>
+<p><img alt="image 1" src="../../img/webapp_1.png" width="300"/></p>
+<h3 id="continuous-deployment">Continuous Deployment</h3>
+<p><img alt="image 1" src="../../img/webapp_2.png" width="300"/></p>
+<h4 id="url-for-the-server">Url for the server</h4>
+<pre><code>https://ndvidemo.azurewebsites.net
+</code></pre>
+<h3 id="updating-changes">Updating changes</h3>
+<pre><code>docker build -t ndvireg.azurecr.io/ndvidemo:latest .
+</code></pre>
+<pre><code>docker push ndvireg.azurecr.io/ndvidemo:latest
+</code></pre>
+<h5 id="remarks-tee-tyyli-punaisella">REMARKS (tee tyyli punaisella!!!)</h5>
+<p>!!!!!!!!!
+ei aina päivity!!!! joten container registryn repository deletetoitava sekä jos kus serveri päivityksen jälkeen käynnistettävä!!!</p>
+<p><img alt="image 1" src="../../img/ndvireg_repository.png" width="600"/></p>
+<p>Container registry
+ndvireg | Repositories  DELETE </p>
+<h3 id="testing-docker-image-in-local-on-docker-desktop">Testing Docker image in local on Docker Desktop</h3>
+<p>tai sitten vaan komento riviltä run ...</p>
+<p>E:\YAMK\ytsp0200-3004\backend_doc\docs\img</p>
+<h2 id="pipeline">Pipeline</h2>
+<p>Azure pipeline on Azure DevOps. 
+Pipeline is more advanced for deployment </p>
+<p>pipeline is triggered  by <code>git push</code></p>
+<h3 id="creating-a-pipeline">Creating a pipeline</h3>
+<p>First the repository for Azure DevOps 
+<a href="https://dev.azure.com/" target="_blank">https://dev.azure.com/</a>
+project have to be created</p>
+<p>the source files should be pushed to the repository of Azure DevOps.</p>
+<p><strong>Step by step</strong>
+<img alt="alt text" src="../../img/pipeline.gif"/></p>
+<h3 id="azure-pipelinesyml">azure-pipelines.yml</h3>
+<p>Azure Devops generated YAML file defining pipelines for CI/CD (Continuous Integration/Continuous Deployment).</p>
+<pre><code># Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '2b2e35d0-3140-4c01-8409-9e453d42fa6f'
+  imageRepository: 'ndvi'
+  containerRegistry: 'ndvireg.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+</code></pre>
+<h3 id="the-result">The result</h3>
+<p>After deployment the application can be get in browser at address  </p>
+<p><a href="https://ndvidemo.azurewebsites.net/" target="_blank">https://ndvidemo.azurewebsites.net/</a></p>
+<p>If frontend app is included with backend the landing view is as following.
+<img alt="start" src="../../img/startview.png" width="800"/></p>
+<p>If there is not frontend app included the view of root address looks like this. 
+<img alt="start" src="../../img/backend.png" width="800"/></p>
+<!--![alt text](../../img/ndviautoplay.gif)-->
+<!--
+<img src="../../img/pipe_1.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
+<img src="../../img/pipe_2.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
+<img src="../../img/pipe_3.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
+<img src="../../img/pipe_4.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
+<img src="../../img/pipe_5.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
+<img src="../../img/pipe_6.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
+<img src="../../img/pipe_7.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
+<img src="../../img/pipe_8.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
+<img src="../../img/pipe_9.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
+<img src="../../img/pipe_10.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
+<img src="../../img/pipe_11.png" alt="image 1" width="800" style="display: block; margin: 0;"/>-->
+<br/>
+</div>
+<footer class="container-fluid wm-page-content">
+<p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a> using <a href="https://github.com/gristlabs/mkdocs-windmill">Windmill</a> theme by Grist Labs.</p>
+</footer>
+<script>
+            window.update_swagger_ui_iframe_height = function (id) {
+                var iFrameID = document.getElementById(id);
+                if (iFrameID) {
+                    full_height = (iFrameID.contentWindow.document.body.scrollHeight + 80) + "px";
+                    iFrameID.height = full_height;
+                    iFrameID.style.height = full_height;
+                }
+            }
+        
+            let iframe_id_list = []
+            var iframes = document.getElementsByClassName("swagger-ui-iframe");
+            for (var i = 0; i < iframes.length; i++) { 
+                iframe_id_list.push(iframes[i].getAttribute("id"))
+            }
+        
+            let ticking = true;
+            
+            document.addEventListener('scroll', function(e) {
+                if (!ticking) {
+                    window.requestAnimationFrame(()=> {
+                        let half_vh = window.innerHeight/2;
+                        for(var i = 0; i < iframe_id_list.length; i++) {
+                            let element = document.getElementById(iframe_id_list[i])
+                            if(element==null){
+                                return
+                            }
+                            let diff = element.getBoundingClientRect().top
+                            if(element.contentWindow.update_top_val){
+                                element.contentWindow.update_top_val(half_vh - diff)
+                            }
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        </script></body>
+</html>

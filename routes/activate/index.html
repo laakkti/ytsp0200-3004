@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+<title>activate - ytsp0200-3004 Backend for NDVI demo for agriculture</title>
+<link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet"/>
+<link href="../../css/font-awesome-4.7.0.css" rel="stylesheet"/>
+<link href="../../css/base.css" rel="stylesheet"/>
+<link href="../../css/highlight.css" rel="stylesheet"/>
+<link href="../../style.css" rel="stylesheet"/>
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+<script src="../../js/jquery-3.2.1.min.js"></script>
+<script src="../../js/bootstrap-3.3.7.min.js"></script>
+<script src="../../js/highlight.pack.js"></script>
+<base target="_top"/>
+<script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "TEKSTI ihan puppua t\u00e4h\u00e4n kohtaan", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+<script src="../../js/base.js"></script>
+</head>
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+<div class="container-fluid wm-page-content">
+<a name="_top"></a>
+<h1 id="teksti-ihan-puppua-tahan-kohtaan">TEKSTI ihan puppua tähän kohtaan</h1>
+<p>Activate specifig aois to get NDVI-image and related statistics.
+This is just for updating database with multiple aois
+does not return any data for client, is triggered from the client.<br/>
+sama kuin list mutta array of geometries as parameter and process is different...
+is identical too list 
+but technically implemented in the code some kind of  parallel</p>
+<p>simplified, general and principled description not quite real</p>
+<p>does not return anything jsut success 200 statuscode</p>
+<p>Retrieves/returns a list of Sentinel-hub NDVI dates with statistics and updates the database if new data is available.</p>
+<p>lisää api.md:stä usecases ja parametrit
+ja paluu arvot mutta frontend docu</p>
+<p>List the days with found images for the given geometry found in Sentinel Hub. Service should store the given geometry and the days in which the images can be found so that there would be no need to re-query the days (only newer days from the last query should be queried) every time from Sentinel Hub. If the image is available for given day then the service should assign unique id "sentinelid" for that day and image.</p>
+<table>
+<thead>
+<tr>
+<th>Endpoint Url</th>
+<th>HTTP Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/ndvi/api/v1/activate</td>
+<td>POST</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Request</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>geometry</td>
+<td>Array of  geoJSON</td>
+<td>Array of geometries in geoJSON format, coordinate reference system WGS84 (EPSG:4326)</td>
+</tr>
+<tr>
+<td>start_date</td>
+<td>dateString (ISO 8601)</td>
+<td>The start date to include images from</td>
+</tr>
+<tr>
+<td>end_date</td>
+<td>dateString (ISO 8601)</td>
+<td>The end date to include images to</td>
+</tr>
+</tbody>
+</table>
+<pre><code>Request body
+{   
+    "geometry": "geoJSON",
+    "start_date": "dateString",
+    "end_date": "dateString"
+}
+</code></pre>
+<p><strong>Response</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>array</td>
+<td>All the days from which images can be queried</td>
+</tr>
+<tr>
+<td>generationtime</td>
+<td>dateString (ISO 8601)</td>
+<td>The date of the image</td>
+</tr>
+<tr>
+<td>sentinelid</td>
+<td>string</td>
+<td>generationtime and geometry converted to sha256-format, generated for the request to be used when fetching the image from database e.g. 2023-05-30T00:00:00Z_c7a5478757abfae7286751b0950e58991fa3f6ef77f77e844baba038cb86b647</td>
+</tr>
+</tbody>
+</table>
+<div class="mermaid">sequenceDiagram
+    Autonumber
+    participant Client
+    participant Server as Server: activate
+    participant MongoDB
+    participant SentinelHub
+
+    activate Server
+    Note left of Server: /ndvi/api/v1/activate
+    Client-&gt;&gt;Server: Request (array of geometries)
+    loop for each geometry in array
+        Server-&gt;&gt;MongoDB: Query (geometry)        
+        MongoDB--&gt;&gt;Server: Data (geometry)
+
+        alt Data found in MongoDB
+            alt Current date is newer than last date in list for specific geometry (AOI)
+                Server-&gt;&gt;SentinelHub: Request new data (geometry)
+                SentinelHub--&gt;&gt;Server: Response (New data)
+                Server-&gt;&gt;MongoDB: Store new data (geometry)
+                Server-&gt;&gt;MongoDB: Query (geometry)
+                MongoDB--&gt;&gt;Server: Data (geometry)
+            end
+            Server--&gt;&gt;Client: Response (statuscode 200)
+            Note right of Server: Data found in MongoDB for geometry
+        else Data not found in MongoDB
+            Server-&gt;&gt;SentinelHub: Request (geometry)
+            SentinelHub--&gt;&gt;Server: Response (Data not found in MongoDB)
+            Server-&gt;&gt;MongoDB: Store Data (geometry)
+            Server-&gt;&gt;MongoDB: Query (geometry)
+            MongoDB--&gt;&gt;Server: Data (geometry)
+            Server--&gt;&gt;Client: Response (statuscode 200)
+            Note right of Server: Data not found in MongoDB for geometry
+        end
+    end
+    deactivate Server
+</div>
+<br/>
+</div>
+<footer class="container-fluid wm-page-content">
+<p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a> using <a href="https://github.com/gristlabs/mkdocs-windmill">Windmill</a> theme by Grist Labs.</p>
+</footer>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+mermaid.initialize({});</script><script>
+            window.update_swagger_ui_iframe_height = function (id) {
+                var iFrameID = document.getElementById(id);
+                if (iFrameID) {
+                    full_height = (iFrameID.contentWindow.document.body.scrollHeight + 80) + "px";
+                    iFrameID.height = full_height;
+                    iFrameID.style.height = full_height;
+                }
+            }
+        
+            let iframe_id_list = []
+            var iframes = document.getElementsByClassName("swagger-ui-iframe");
+            for (var i = 0; i < iframes.length; i++) { 
+                iframe_id_list.push(iframes[i].getAttribute("id"))
+            }
+        
+            let ticking = true;
+            
+            document.addEventListener('scroll', function(e) {
+                if (!ticking) {
+                    window.requestAnimationFrame(()=> {
+                        let half_vh = window.innerHeight/2;
+                        for(var i = 0; i < iframe_id_list.length; i++) {
+                            let element = document.getElementById(iframe_id_list[i])
+                            if(element==null){
+                                return
+                            }
+                            let diff = element.getBoundingClientRect().top
+                            if(element.contentWindow.update_top_val){
+                                element.contentWindow.update_top_val(half_vh - diff)
+                            }
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        </script></body>
+</html>

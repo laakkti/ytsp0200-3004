@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+<title>aiostomongo - ytsp0200-3004 Backend for NDVI demo for agriculture</title>
+<link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet"/>
+<link href="../../css/font-awesome-4.7.0.css" rel="stylesheet"/>
+<link href="../../css/base.css" rel="stylesheet"/>
+<link href="../../css/highlight.css" rel="stylesheet"/>
+<link href="../../style.css" rel="stylesheet"/>
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+<script src="../../js/jquery-3.2.1.min.js"></script>
+<script src="../../js/bootstrap-3.3.7.min.js"></script>
+<script src="../../js/highlight.pack.js"></script>
+<base target="_top"/>
+<script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+        ];
+
+    </script>
+<script src="../../js/base.js"></script>
+</head>
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+<div class="container-fluid wm-page-content">
+<a name="_top"></a>
+<h4 id="aiostomongo">AiosToMongo</h4>
+<p>Stores area of interest specifig data from json-format to MongoDB database triggered by client. </p>
+<pre><code>controllers/
+│   └── dev-controllers.js
+│        └── aiosToMongo 
+└── routes/
+    └── dev-routes.js
+</code></pre>
+<pre><code class="language-javascript">const devControllers = require('../controllers/dev-controllers');
+router.get('/aiostomongo', devControllers.aiosToMongo);
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Endpoint Url</th>
+<th>HTTP Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/ndvi/api/v1/aiostomongo</td>
+<td>GET</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Request</strong></p>
+<p>No parameters.</p>
+<p><strong>Response</strong></p>
+<p>Statuscode 200 if successful, otherwise 404 failed</p>
+<p>plannin jutussa jotain lisää 
+endpoint: .../ndvi/api/v1/workAreasToMongo
+TEE muista vastavaksi ei parametrea ja paluuravoa vain statuscode!!!</p>
+<div class="mermaid">sequenceDiagram
+  autonumber
+  participant Frontend
+  participant Backend
+  participant MongoDb
+
+  activate Backend
+  note left of Backend: /ndvi/api/v1/aiostomongo
+  Frontend-&gt;&gt;Backend: Request
+
+  note right of Backend: require("../data/workareas.json")
+  alt All insertions successful
+    loop through each workarea (index i)
+      Backend-&gt;&gt;MongoDb: Insert workarea data[i]
+      MongoDb--&gt;&gt;Backend: Acknowledge insertion
+    end
+    Backend-&gt;&gt;Frontend: Status 200 (successful)
+  else Some insertion failed or something else got wrong
+    Backend-&gt;&gt;Frontend: Status 404 (failure)
+  end
+  deactivate Backend
+
+</div>
+<p>The error statuscode could be more specifig.</p>
+<br/>
+</div>
+<footer class="container-fluid wm-page-content">
+<p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a> using <a href="https://github.com/gristlabs/mkdocs-windmill">Windmill</a> theme by Grist Labs.</p>
+</footer>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+mermaid.initialize({});</script><script>
+            window.update_swagger_ui_iframe_height = function (id) {
+                var iFrameID = document.getElementById(id);
+                if (iFrameID) {
+                    full_height = (iFrameID.contentWindow.document.body.scrollHeight + 80) + "px";
+                    iFrameID.height = full_height;
+                    iFrameID.style.height = full_height;
+                }
+            }
+        
+            let iframe_id_list = []
+            var iframes = document.getElementsByClassName("swagger-ui-iframe");
+            for (var i = 0; i < iframes.length; i++) { 
+                iframe_id_list.push(iframes[i].getAttribute("id"))
+            }
+        
+            let ticking = true;
+            
+            document.addEventListener('scroll', function(e) {
+                if (!ticking) {
+                    window.requestAnimationFrame(()=> {
+                        let half_vh = window.innerHeight/2;
+                        for(var i = 0; i < iframe_id_list.length; i++) {
+                            let element = document.getElementById(iframe_id_list[i])
+                            if(element==null){
+                                return
+                            }
+                            let diff = element.getBoundingClientRect().top
+                            if(element.contentWindow.update_top_val){
+                                element.contentWindow.update_top_val(half_vh - diff)
+                            }
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        </script></body>
+</html>

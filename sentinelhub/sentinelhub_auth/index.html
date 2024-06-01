@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+<title>Authentication - ytsp0200-3004 Backend for NDVI demo for agriculture</title>
+<link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet"/>
+<link href="../../css/font-awesome-4.7.0.css" rel="stylesheet"/>
+<link href="../../css/base.css" rel="stylesheet"/>
+<link href="../../css/highlight.css" rel="stylesheet"/>
+<link href="../../style.css" rel="stylesheet"/>
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+<script src="../../js/jquery-3.2.1.min.js"></script>
+<script src="../../js/bootstrap-3.3.7.min.js"></script>
+<script src="../../js/highlight.pack.js"></script>
+<base target="_top"/>
+<script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+        ];
+
+    </script>
+<script src="../../js/base.js"></script>
+</head>
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+<div class="container-fluid wm-page-content">
+<a name="_top"></a>
+<p>TSEKKAA DIAGRAMS!!!!!</p>
+<p>koska sentinelhub token yhteys tarvitaan vain ndvi-contollers.js:ssä
+niin  eikä globa authoteken voisi olla ja cron päivittäisi sitä
+tai tekisi tietyinnväliajoin tsekin!!!</p>
+<p>kerro mitä pitää huomioda kun/jos pitää kutsua muuten kuin middlewaren kautta eräissä poikkeustapauksissa</p>
+<p>silloin kun pitkiä sessioita midllewaren kautta check ei toimi kun sen kerran
+mutta TESTAA että kun laittaa toisen setin niin toimiiko check mutta se ei kuitenkaan uusi tokenia JOTEn täytyy välittää activaterouteen check ja kutsua sitä "sopivassa"  "kohtaa"</p>
+<p>muuta tiedoston nimi authetication.js tms. user on erikseeen smanniminen mutta eri hakemistossa esim.user
+user (node/express-server) for sentinelhub service needs service plan with </p>
+<p>the values are stored into .env file
+e.g.</p>
+<pre><code>sentinelHubClientId = "6c9c641b-cc70-4595-8007-360b09cd533a"
+sentinelHubClientSecret = "88myeh2ksnUjQjcCMTL580HAkoifxYgR"
+instanceId = "8c9fd4ff-f38d-42ef-aad2-0f0a2d0d7bfa"
+</code></pre>
+<p>in production env should be stored in secrets of the server</p>
+<div class="mermaid">sequenceDiagram
+    autonumber
+    participant Server
+    participant Sentinelhub
+    Note left of Server: ndvi_controller.js
+    Server -&gt;&gt; Sentinelhub: Request authToken
+    Sentinelhub --&gt;&gt; Server: authToken (60 min.)
+    Server -&gt;&gt; Server: checkToken(authToken)
+    alt Token about to expire
+        Server -&gt;&gt; Sentinelhub: Request authToken
+        Sentinelhub --&gt;&gt; Server: Updated authToken (60 min.)
+    end
+</div>
+<ol>
+<li>checkToken is used in ndvi_controller.js for list and image routes as middleware </li>
+</ol>
+<p>Point 1<br/>
+in <strong>ndvi_controller.js</strong> request for sentinelHub token
+params: clientId, clientSecret</p>
+<p>Point 2 token to global varaiable authToken</p>
+<p>When request for token from sentinelhub it will be expired in 60 min, so it need to be refreshed actually asking for new so expiration need to be checked for a while on serverside code</p>
+<p>on backend server code</p>
+<p>request for token</p>
+<p><code>../utils/authenticate.js</code></p>
+<p>request for the time left for the expiration</p>
+<p><code>../utils/checkToken.js</code></p>
+<p><strong>var authToken</strong> is holding the token to sentinelHub 
+it is a global variable the scope just in the code of ndvi_cotroller.js</p>
+<p>There is not sense to request token for every request but the status an left time will be asked Middleware checkstatus w
+there is limit for request token during time..
+this may be the clearest and most solid simple way!!!! </p>
+<p>mainitse OAUTH2 token</p>
+<p><strong>middleware can be used just for specifig route</strong></p>
+<p>token </p>
+<p>kokeilu
+siirretty middlewareen koko kirjautuminen <strong>MUTTA</strong> ehtii mahd. joissakin tapaukissa jos esim. kauan kestävä prosessi niin voi jäädä uusiminen, sama ongelma kuin AIKAISEMMINKin eli pitkissä pitäis olla kutsu usemmaoin tsekkaukseen 10min <strong>vara!!!</strong>
+Itse good and convenient way to check token in middleware but if very long process
+eikä muu prosessi uusi SIIS onko token sama varmaankin joka sessiolle!!!!</p>
+<p>mihin talletetaan onko kompomnentin sisällä 
+käytetään myös statisticksissa beareer versiona</p>
+<p>when module/component is defined or taken in action
+const middleware = require('../utils/sentinelhub_token')
+new token for sentinelhub is requested first time and in the future refresing actually getting new will be handled by middleware
+everytime request for the route token expiration time will be compared to current time, elapsed time when if the remaining tme is 
+which defined<br/>
+expiration time is 60 min </p>
+<p>Kuva aikaisemmin siihe liittyen tämä middleware jolloin
+note ndvi_controller.js on väärä tai miten sen ottaa</p>
+<p>ndvi-routes.js
+const middleware = require('../middlewares/sentinelhub_token')</p>
+<p>router.post('/list', middleware.checkToken,ndviControllers.list);</p>
+<p>explanation
+global variable autToken,  method to rwust token is executed when module is required when servers is started.</p>
+<br/>
+</div>
+<footer class="container-fluid wm-page-content">
+<p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a> using <a href="https://github.com/gristlabs/mkdocs-windmill">Windmill</a> theme by Grist Labs.</p>
+</footer>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+mermaid.initialize({});</script><script>
+            window.update_swagger_ui_iframe_height = function (id) {
+                var iFrameID = document.getElementById(id);
+                if (iFrameID) {
+                    full_height = (iFrameID.contentWindow.document.body.scrollHeight + 80) + "px";
+                    iFrameID.height = full_height;
+                    iFrameID.style.height = full_height;
+                }
+            }
+        
+            let iframe_id_list = []
+            var iframes = document.getElementsByClassName("swagger-ui-iframe");
+            for (var i = 0; i < iframes.length; i++) { 
+                iframe_id_list.push(iframes[i].getAttribute("id"))
+            }
+        
+            let ticking = true;
+            
+            document.addEventListener('scroll', function(e) {
+                if (!ticking) {
+                    window.requestAnimationFrame(()=> {
+                        let half_vh = window.innerHeight/2;
+                        for(var i = 0; i < iframe_id_list.length; i++) {
+                            let element = document.getElementById(iframe_id_list[i])
+                            if(element==null){
+                                return
+                            }
+                            let diff = element.getBoundingClientRect().top
+                            if(element.contentWindow.update_top_val){
+                                element.contentWindow.update_top_val(half_vh - diff)
+                            }
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        </script></body>
+</html>

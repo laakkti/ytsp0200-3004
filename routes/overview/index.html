@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+<title>Overview - ytsp0200-3004 Backend for NDVI demo for agriculture</title>
+<link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet"/>
+<link href="../../css/font-awesome-4.7.0.css" rel="stylesheet"/>
+<link href="../../css/base.css" rel="stylesheet"/>
+<link href="../../css/highlight.css" rel="stylesheet"/>
+<link href="../../style.css" rel="stylesheet"/>
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+<script src="../../js/jquery-3.2.1.min.js"></script>
+<script src="../../js/bootstrap-3.3.7.min.js"></script>
+<script src="../../js/highlight.pack.js"></script>
+<base target="_top"/>
+<script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Backend", url: "#_top", children: [
+              {title: "resfFull plugin tee testi routeihin ilman ja tokenin kanssa!!!!", url: "#resffull-plugin-tee-testi-routeihin-ilman-ja-tokenin-kanssa" },
+              {title: "Routes", url: "#routes" },
+          ]},
+          {title: "user-routes", url: "#user-routes", children: [
+          ]},
+          {title: "Authentication / token", url: "#authentication-token", children: [
+              {title: "user-routes -\u0026gt; user-controllers", url: "#user-routes-user-controllers" },
+              {title: "user-controllers", url: "#user-controllers" },
+          ]},
+          {title: "ndvi-routes", url: "#ndvi-routes", children: [
+              {title: "list", url: "#list" },
+              {title: "NEEDs token use this endpoint/route", url: "#needs-token-use-this-endpointroute" },
+              {title: "tulleeko johonkin varsinaiset kutsut sentinelhubiin (senetinelhubista oma kappale)", url: "#tulleeko-johonkin-varsinaiset-kutsut-sentinelhubiin-senetinelhubista-oma-kappale" },
+          ]},
+          {title: "TEKSTI ihan puppua t\u00e4h\u00e4n kohtaan", url: "#teksti-ihan-puppua-tahan-kohtaan", children: [
+              {title: "Image", url: "#image" },
+              {title: "KAAVIOSTA puuttuu token in header pit\u00e4isk\u00e4 vaan manita Request(token in header) kuten frontin dokussa", url: "#kaaviosta-puuttuu-token-in-header-pitaiska-vaan-manita-requesttoken-in-header-kuten-frontin-dokussa" },
+              {title: "pit\u00e4is olla oikeastaan vuokaavio ti structure tms. josskain mongodb.js-\u0026gt; image ehk\u00e4 mongodb kappaleeseen", url: "#pitais-olla-oikeastaan-vuokaavio-ti-structure-tms-josskain-mongodbjs-image-ehka-mongodb-kappaleeseen" },
+              {title: "Aois", url: "#aois" },
+              {title: "Dev-routes", url: "#dev-routes" },
+              {title: "activate (keksi jokin muu nimi)", url: "#activate-keksi-jokin-muu-nimi" },
+          ]},
+        ];
+
+    </script>
+<script src="../../js/base.js"></script>
+</head>
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+<div class="container-fluid wm-page-content">
+<a name="_top"></a>
+<p>developing route otetaan mukaan vain develop modessa
+priction modessa ko. route ei tule mukaan</p>
+<h1 id="backend">Backend</h1>
+<p>NDVI-controller
+ - list
+ - activate
+ - image</p>
+<p>Develop
+ -  database... 
+Erikseen on develop-route sisältäen demon datan sekä joitakin mm. database maintrenece tools</p>
+<p>Weather
+- tässä tapuksessa haetaan valitun paikkakunnan säädataa vaikka joka päivältä mitä on ollut
+- voisi näkyä ko. paikkakunnan sää joka on parhaillaan (jokin päivitys cronilla) frontille ie vitisyksiä
+  kaikki menee backendin kautta</p>
+<p>Monitoring SOCKET <br/>
+- päivityksen monitotointi  </p>
+<hr/>
+<h2 id="resffull-plugin-tee-testi-routeihin-ilman-ja-tokenin-kanssa">resfFull plugin tee testi routeihin ilman ja tokenin kanssa!!!!</h2>
+<h2 id="routes">Routes</h2>
+<h3 id="aois-to-mongodb-puuttuu">AOIs to MongoDB puuttuu</h3>
+<pre><code>Routes
+├── user-routes
+│   ├── register
+│   └── login
+│
+├── ndvi-routes
+│   ├── list
+│   ├── image
+│   ├── weather
+│   ├── activate
+│   └── aois
+│
+└── dev-routes
+    └── (multiple actions)
+</code></pre>
+<p>for dev-routes the routes are not documented in this case.
+just one aoistomongo.</p>
+<h3 id="jotenkin-pitaisi-kuvata-kuinka-koodillisesti-rakenne">Jotenkin pitäisi kuvata kuinka "koodillisesti" rakenne</h3>
+<h1 id="user-routes">user-routes</h1>
+<ul>
+<li><a href="register.md">Register</a></li>
+</ul>
+<h1 id="authentication-token">Authentication / token</h1>
+<p>use of all the routes need authentocation made from frontend app
+to route named user to get token which is needed for use of services.</p>
+<p>so token is needed and some route needs administrator privileges.</p>
+<h2 id="user-routes-user-controllers">user-routes -&gt; user-controllers</h2>
+<p>router.post('/login', usersControllers.login);
+router.post('/register', usersControllers.register);</p>
+<h2 id="user-controllers">user-controllers</h2>
+<p>const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken')</p>
+<ul>
+<li>register</li>
+<li>login</li>
+</ul>
+<h3 id="register">register</h3>
+<div class="mermaid">sequenceDiagram
+    autonumber
+    participant Client
+    participant Server
+    participant MongoDb
+
+    Client-&gt;&gt;Server: POST /ndvi/api/v1/register
+    alt Insertion Successful
+        Server-&gt;&gt;MongoDb: Insert user data
+        MongoDb--&gt;&gt;Server: Acknowledge insertion
+        Server--&gt;&gt;Client: Status 200 (Registration successful)
+    else Insertion Failed
+        Server--&gt;&gt;Client: Status 401 (Registration failed, user exists)
+    end
+</div>
+<p>taking in action on App.js</p>
+<p>const userRouter = require("./routes/user-routes");
+app.use("/ndvi/api/v1",userRouter);</p>
+<p>calling to 
+../ndvi/api/v1/register
+- parameters
+  firstname, lastname, email, password</p>
+<p>if exists return xxxx
+if not exists -&gt; sace
+- return saved 200</p>
+<p>returns if succees (Teemun jutusta mallia) mitä parmaetriksi eli kuinka kutsutaan ja pitä palauttaa</p>
+<ul>
+<li><a href="login.md">Login</a></li>
+</ul>
+<h1 id="ndvi-routes">ndvi-routes</h1>
+<h2 id="list">list</h2>
+<h2 id="needs-token-use-this-endpointroute">NEEDs token use this endpoint/route</h2>
+<p>Retrieves/returns a list of Sentinel-hub NDVI dates with statistics and updates the database if new data is available.</p>
+<p>List the days with found images for the given geometry found in Sentinel Hub. Service stores the given geometry and the days in which the images can be found so that there would be no need to re-query the days (only newer days from the last query should be queried) every time from Sentinel Hub. If the image is available for given day then the service should assign unique id "sentinelid" for that day and image.</p>
+<table>
+<thead>
+<tr>
+<th>Endpoint Url</th>
+<th>HTTP Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/ndvi/api/v1/list</td>
+<td>POST</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Request</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>geometry</td>
+<td>geoJSON</td>
+<td>Geometry in geoJSON format, coordinate reference system WGS84 (EPSG:4326)</td>
+</tr>
+<tr>
+<td>start_date</td>
+<td>dateString (ISO 8601)</td>
+<td>The start date to include images from</td>
+</tr>
+<tr>
+<td>end_date</td>
+<td>dateString (ISO 8601)</td>
+<td>The end date to include images to</td>
+</tr>
+</tbody>
+</table>
+<pre><code>Request body
+{   
+    "geometry": "geoJSON",
+    "start_date": "dateString",
+    "end_date": "dateString"
+}
+</code></pre>
+<p><strong>Response</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>array</td>
+<td>All the days from which images can be queried</td>
+</tr>
+<tr>
+<td>generationtime</td>
+<td>dateString (ISO 8601)</td>
+<td>The date of the image</td>
+</tr>
+<tr>
+<td>sentinelid</td>
+<td>string</td>
+<td>generationtime and geometry converted to sha256-format, generated for the request to be used when fetching the image from database e.g. 2023-05-30T00:00:00Z_c7a5478757abfae7286751b0950e58991fa3f6ef77f77e844baba038cb86b647</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-json">[
+  {
+    "generationtime": "2023-05-15T00:00:00Z",
+    "sentinelid": "2023-05-15T00:00:00Z_c7a5478757abfae7286751b0950e58991fa3f6ef77f77e844baba..."
+  },
+  {
+    "generationtime": "2023-05-30T00:00:00Z",
+    "sentinelid": "2023-05-30T00:00:00Z_c7a5478757abfae7286751b0950e58991fa3f6ef77f77e844baba..."
+  },
+  ...
+]
+</code></pre>
+<p><strong>Sequence diagram</strong></p>
+<div class="mermaid">sequenceDiagram
+    Autonumber
+    participant Client
+    participant Server as Server: list
+    participant MongoDB
+    participant SentinelHub
+
+    Note left of Server: /ndvi/api/v1/list
+    Client-&gt;&gt;Server: Request (token in header)   
+    Server-&gt;&gt;MongoDB: Query
+    MongoDB--&gt;&gt;Server: Data
+
+    alt Data found in MongoDB
+        alt Current date is newer than last date in list for specific geometry (AOI)
+            Server-&gt;&gt;SentinelHub: Request new data
+            SentinelHub--&gt;&gt;Server: Response (New data)
+            Server-&gt;&gt;MongoDB: Store new data
+            Server-&gt;&gt;MongoDB: Query
+            MongoDB--&gt;&gt;Server: Data
+        end
+        Server--&gt;&gt;Client: Response
+        Note right of Server: Data found in MongoDB
+    else Data not found in MongoDB
+        Server-&gt;&gt;SentinelHub: Request
+        SentinelHub--&gt;&gt;Server: Response (Data not found in MongoDB)
+        Server-&gt;&gt;MongoDB: Store Data
+        Server-&gt;&gt;MongoDB: Query
+        MongoDB--&gt;&gt;Server: Data
+        Server--&gt;&gt;Client: Response
+        Note right of Server: Data not found in MongoDB
+    end
+</div>
+<p>Pitäiskö muuttaa mondoB dataBaseksi???</p>
+<p>1.
+/ndvi/api/v1/list</p>
+<ol>
+<li>if new data (statistics) is available it will be stored into the database. Also NDVI-imagedata related to all new dates will be request from SentinelHub</li>
+</ol>
+<p><strong>Sequence diagram</strong></p>
+<div class="mermaid">sequenceDiagram
+    Autonumber
+    participant Server as Server: list
+    participant SentinelHub
+    participant MongoDB
+
+    Server-&gt;&gt;SentinelHub: Request new data    
+    SentinelHub--&gt;&gt;Server: Response (New data)
+    Server-&gt;&gt;MongoDB: Store new data
+
+    loop Request image data
+        Server-&gt;&gt;SentinelHub: Request image data (for each new data item)
+        SentinelHub--&gt;&gt;Server: Response (image data)
+        Server-&gt;&gt;MongoDB: Store image data with statistics
+    end
+</div>
+<h2 id="tulleeko-johonkin-varsinaiset-kutsut-sentinelhubiin-senetinelhubista-oma-kappale">tulleeko johonkin varsinaiset kutsut sentinelhubiin (senetinelhubista oma kappale)</h2>
+<p>api.md
+samallahan kun haetaan statistics ja sen perusteella haetaan NDVI-iamges ja tallennetaan kantaan.
+Jos kannata läytyy niin tsekataan jos löytyy uudempaa dataa sen jälkeen kuin viimeksi talllennettiin dataa.</p>
+<h3 id="activate">activate</h3>
+<h1 id="teksti-ihan-puppua-tahan-kohtaan">TEKSTI ihan puppua tähän kohtaan</h1>
+<p>Activate specifig aois to get NDVI-iamge and related statistics.
+this is just for updating database with multiple aois
+does not return any data for client, is triggered from the client.<br/>
+sama kuin list mutta array of geometries as parameter and process is different...
+is identical too list 
+but technically implemented in the code some kind of  parallel</p>
+<p>simplified, general and principled description not quite real</p>
+<p>does not return anything jsut success 200 statuscode</p>
+<p>Retrieves/returns a list of Sentinel-hub NDVI dates with statistics and updates the database if new data is available.</p>
+<p>lisää api.md:stä usecases ja parametrit
+ja paluu arvot mutta frontend docu</p>
+<p>List the days with found images for the given geometry found in Sentinel Hub. Service should store the given geometry and the days in which the images can be found so that there would be no need to re-query the days (only newer days from the last query should be queried) every time from Sentinel Hub. If the image is available for given day then the service should assign unique id "sentinelid" for that day and image.</p>
+<table>
+<thead>
+<tr>
+<th>Endpoint Url</th>
+<th>HTTP Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/ndvi/api/v1/activate</td>
+<td>POST</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Request</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>geometry</td>
+<td>Array of  geoJSON</td>
+<td>Array of geometries in geoJSON format, coordinate reference system WGS84 (EPSG:4326)</td>
+</tr>
+<tr>
+<td>start_date</td>
+<td>dateString (ISO 8601)</td>
+<td>The start date to include images from</td>
+</tr>
+<tr>
+<td>end_date</td>
+<td>dateString (ISO 8601)</td>
+<td>The end date to include images to</td>
+</tr>
+</tbody>
+</table>
+<pre><code>Request body
+{   
+    "geometry": "geoJSON",
+    "start_date": "dateString",
+    "end_date": "dateString"
+}
+</code></pre>
+<p><strong>Response</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>array</td>
+<td>All the days from which images can be queried</td>
+</tr>
+<tr>
+<td>generationtime</td>
+<td>dateString (ISO 8601)</td>
+<td>The date of the image</td>
+</tr>
+<tr>
+<td>sentinelid</td>
+<td>string</td>
+<td>generationtime and geometry converted to sha256-format, generated for the request to be used when fetching the image from database e.g. 2023-05-30T00:00:00Z_c7a5478757abfae7286751b0950e58991fa3f6ef77f77e844baba038cb86b647</td>
+</tr>
+</tbody>
+</table>
+<div class="mermaid">sequenceDiagram
+    Autonumber
+    participant Client
+    participant Server as Server: activate
+    participant MongoDB
+    participant SentinelHub
+
+    Note left of Server: /ndvi/api/v1/activate
+    Client-&gt;&gt;Server: Request (array of geometries)
+    loop for each geometry in array
+        Server-&gt;&gt;MongoDB: Query (geometry)        
+        MongoDB--&gt;&gt;Server: Data (geometry)
+
+        alt Data found in MongoDB
+            alt Current date is newer than last date in list for specific geometry (AOI)
+                Server-&gt;&gt;SentinelHub: Request new data (geometry)
+                SentinelHub--&gt;&gt;Server: Response (New data)
+                Server-&gt;&gt;MongoDB: Store new data (geometry)
+                Server-&gt;&gt;MongoDB: Query (geometry)
+                MongoDB--&gt;&gt;Server: Data (geometry)
+            end
+            Server--&gt;&gt;Client: Response (statuscode 200)
+            Note right of Server: Data found in MongoDB for geometry
+        else Data not found in MongoDB
+            Server-&gt;&gt;SentinelHub: Request (geometry)
+            SentinelHub--&gt;&gt;Server: Response (Data not found in MongoDB)
+            Server-&gt;&gt;MongoDB: Store Data (geometry)
+            Server-&gt;&gt;MongoDB: Query (geometry)
+            MongoDB--&gt;&gt;Server: Data (geometry)
+            Server--&gt;&gt;Client: Response (statuscode 200)
+            Note right of Server: Data not found in MongoDB for geometry
+        end
+    end
+</div>
+<h2 id="image">Image</h2>
+<p>Returns the NDVI image with statictics for the given sentinelid.</p>
+<pre><code>controllers/
+│   └── ndvi-controllers.js
+│        └── image 
+└── routes/
+    └── ndvi-routes.js
+</code></pre>
+<pre><code class="language-javascript">const ndviControllers = require('../controllers/ndvi-controllers');
+router.get('/image/:sentinelid', ndviControllers.image);
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Endpoint Url</th>
+<th>HTTP Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/ndvi/api/v1/image</td>
+<td>GET</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Request</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sentinelid</td>
+<td>string</td>
+<td>id for image (generated when image with related data fetched from sentinelhub and saved into database)</td>
+</tr>
+<tr>
+<td>epsg</td>
+<td>integer</td>
+<td>optional, used when related coordinates need to be in system EPSG:3067</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>average</td>
+<td>float</td>
+<td>Average value of the NDVI</td>
+</tr>
+<tr>
+<td>max</td>
+<td>float</td>
+<td>Maximum value of the NDVI</td>
+</tr>
+<tr>
+<td>min</td>
+<td>float</td>
+<td>Minimum value of the NDVI</td>
+</tr>
+<tr>
+<td>std</td>
+<td>float</td>
+<td>Standard deviation value of the NDVI</td>
+</tr>
+<tr>
+<td>image</td>
+<td></td>
+<td>Image of the NDVI</td>
+</tr>
+<tr>
+<td>image.minX</td>
+<td>float</td>
+<td>Bounding rect minimum X value, coordinate reference system WGS84 (EPSG:4326)</td>
+</tr>
+<tr>
+<td>image.minY</td>
+<td>float</td>
+<td>Bounding rect minimum Y value, coordinate reference system WGS84 (EPSG:4326)</td>
+</tr>
+<tr>
+<td>image.maxX</td>
+<td>float</td>
+<td>Bounding rect maximum X value, coordinate reference system WGS84 (EPSG:4326)</td>
+</tr>
+<tr>
+<td>image.maxY</td>
+<td>float</td>
+<td>Bounding rect maximum Y value, coordinate reference system WGS84 (EPSG:4326)</td>
+</tr>
+<tr>
+<td>image.dataUrl</td>
+<td>Base&amp;4 string</td>
+<td>Image in Base64 string format (i.e., data:image/png;base64...)</td>
+</tr>
+<tr>
+<td>scale</td>
+<td>array</td>
+<td>Array for NDVI value categories as colours</td>
+</tr>
+<tr>
+<td>scale.color</td>
+<td>string</td>
+<td>Colour as RGB string value</td>
+</tr>
+<tr>
+<td>scale.amount</td>
+<td>integer</td>
+<td></td>
+</tr>
+<tr>
+<td>scale.from</td>
+<td>float</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response datatypes</strong></p>
+<pre><code class="language-json">{
+    "average": "float",
+    "max": "float",
+    "min": "float",
+  "std": "float",
+    "image": {
+        "minX": "float",
+        "minY": "float",
+        "maxX": "float",
+        "maxY": "float",
+        "dataUrl": "Base64 string"
+    },
+    "scale": [
+        {
+            "color": "string",
+            "amount": "integer",
+            "from": "float"
+        },
+        {
+            "color": "string",
+            "amount": "integer",
+            "from": "float"
+        },
+        {
+            "color": "string",
+            "amount": "integer",
+            "from": "float"
+        },
+        {
+            "color": "string",
+            "amount": "integer",
+            "from": "float"
+        }
+    ]
+}
+</code></pre>
+<p><strong>Example</strong></p>
+<pre><code class="language-json">{
+    "average": 0.5657129907618343,
+    "max": 0.75,
+    "min": 0.15,
+  "std": 0.90 
+    "image": {
+        "minX": 26.1930913,
+        "minY": 62.9857763,
+        "maxX": 26.194766,
+        "maxY": 62.9867615
+        "dataUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABuCAYAAACnQwS5AAADnEl..."
+    },
+    "scale": [
+        {
+            "color": "rgb(244, 67, 54)",
+            "amount": 0,
+            "from": 0.15
+        },
+        {
+            "color": "rgb(255, 152, 0)",
+            "amount": 0,
+            "from": 0.3
+        },
+        {
+            "color": "rgb(255, 235, 59)",
+            "amount": 22,
+            "from": 0.45
+        },
+        {
+            "color": "rgb(76, 175, 80)",
+            "amount": 78,
+            "from": 0.6
+        }
+    ]
+}
+</code></pre>
+<h2 id="kaaviosta-puuttuu-token-in-header-pitaiska-vaan-manita-requesttoken-in-header-kuten-frontin-dokussa">KAAVIOSTA puuttuu token in header pitäiskä vaan manita Request(token in header) kuten frontin dokussa</h2>
+<h2 id="pitais-olla-oikeastaan-vuokaavio-ti-structure-tms-josskain-mongodbjs-image-ehka-mongodb-kappaleeseen">pitäis olla oikeastaan vuokaavio ti structure tms. josskain mongodb.js-&gt; image ehkä mongodb kappaleeseen</h2>
+<p><strong>Sequence diagram</strong></p>
+<div class="mermaid">sequenceDiagram
+    Autonumber
+    participant Client
+    participant Server as Server: image
+    participant MongoDB
+
+    Note left of Server: /ndvi/api/v1/image
+    Client-&gt;&gt;Server: Request (token in header)
+    alt Image data found in MongoDB
+        Server-&gt;&gt;MongoDB: Query for image data
+        MongoDB--&gt;&gt;Server: Image data
+        Server--&gt;&gt;Client: Response (Image data)
+    else Image data not found in MongoDB
+        Server--&gt;&gt;Client: Response (statuscode 404)
+    end
+</div>
+<div class="mermaid">sequenceDiagram
+    Client-&gt;&gt;+NDVI: image 
+    alt no image available for sentinelid
+        NDVI-&gt;&gt;Client: 404 Not found
+    else
+        NDVI-&gt;&gt;-Client: 200 OK
+    end
+
+</div>
+<p>MARK:notice::: in case of 404 there is sometring error situation on front end or database is corrupted. Will happen very rarely or never but in testinf/developing situations.  </p>
+<h3 id="weather">weather</h3>
+<pre><code>controllers/
+│   └── ndvi-controllers.js
+│        └── weather 
+└── routes/
+    └── ndvi-routes.js
+</code></pre>
+<pre><code class="language-javascript">const ndviControllers = require('../controllers/ndvi-controllers');
+router.post('/weather', ndviControllers.weather);
+</code></pre>
+<p>Returns the NDVI image with statictics for the given sentinelid.</p>
+<table>
+<thead>
+<tr>
+<th>Endpoint Url</th>
+<th>HTTP Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/ndvi/api/v1/weather</td>
+<td>POST</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Request</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>topic</td>
+<td>string</td>
+<td>current weather or  accumulated_temperature or accumulated_precipitation</td>
+</tr>
+<tr>
+<td>geometry</td>
+<td>geoJSON</td>
+<td>Geometry in geoJSON format, coordinate reference system WGS84 (EPSG:4326)</td>
+</tr>
+<tr>
+<td>start_date</td>
+<td>dateString (ISO 8601)</td>
+<td>The start date to history data from</td>
+</tr>
+<tr>
+<td>end_date</td>
+<td>dateString (ISO 8601)</td>
+<td>The end date to history data to</td>
+</tr>
+</tbody>
+</table>
+<pre><code>Request body
+{ 
+  "topic": "string",  
+    "geometry": "geoJSON",
+    "start_date": "dateString",
+    "end_date": "dateString"
+}
+</code></pre>
+<p>Date parameters are just for topic as accumulated_temperature or accumulated_precipitation</p>
+<p><strong>Response when topic parameter is "current"</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td>json</td>
+<td>there are multiple variables, getting main.temp, main.feels_like, main.temp_min, main.temp_max</td>
+</tr>
+<tr>
+<td>weather[0].main</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response when topic parameter is "accumulated_temperature" or "accumulated_precipitation"</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td>array of json</td>
+<td>there are multiple variables, getting date, rain or temp</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sequence diagram</strong></p>
+<div class="mermaid">sequenceDiagram
+    Autonumber
+    participant Client
+    participant Server as Server: weather
+    participant OpenWeatherMap
+
+    Note left of Server: /ndvi/api/v1/weather
+    Client-&gt;&gt;Server: Request
+    alt Topic is current
+        Server-&gt;&gt;OpenWeatherMap: Request (https://api.openweathermap.org)
+        OpenWeatherMap--&gt;&gt;Server: Response with current weather data
+        Server--&gt;&gt;Client: Response with current weather data
+    else Topic is accumulated_temperature
+        Server-&gt;&gt;OpenWeatherMap: Request (https://history.openweathermap.org)
+        OpenWeatherMap--&gt;&gt;Server: Response with accumulated temperature data
+        Server--&gt;&gt;Client: Response with accumulated temperature data
+    else Topic is accumulated_precipitation
+        Server-&gt;&gt;OpenWeatherMap: Request (https://history.openweathermap.org)
+        OpenWeatherMap--&gt;&gt;Server: Response with accumulated precipitation data
+        Server--&gt;&gt;Client: Response with accumulated precipitation data
+    end
+</div>
+<p>numeroituihin kohtiin paremmin parametrit yms.</p>
+<h2 id="aois">Aois</h2>
+<p>Returns array of aios.</p>
+<pre><code>controllers/
+│   └── ndvi-controllers.js
+│        └── aois 
+└── routes/
+    └── ndvi-routes.js
+</code></pre>
+<pre><code class="language-javascript">const ndviControllers = require('../controllers/ndvi-controllers');
+router.post('/aois', ndviControllers.aois);
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Endpoint Url</th>
+<th>HTTP Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/ndvi/api/v1/aois</td>
+<td>GET</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Request</strong></p>
+<p>no params</p>
+<p><strong>Response</strong></p>
+<p>Responses arrray of json data</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>unique identification</td>
+</tr>
+<tr>
+<td>workareaid</td>
+<td>string</td>
+<td>unique workarea identification</td>
+</tr>
+<tr>
+<td>name</td>
+<td>string</td>
+<td>name of aoi</td>
+</tr>
+<tr>
+<td>geometry</td>
+<td>geoJSON</td>
+<td>geometry of aoi in geoJSON format, coordinate reference system WGS84 (EPSG:4326)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sequence diagram</strong></p>
+<div class="mermaid">sequenceDiagram
+    Autonumber
+    participant Client
+    participant Server as Server: aois
+    participant MongoDB
+
+    Note left of Server: /ndvi/api/v1/aois
+    Client-&gt;&gt;Server: Request
+    alt Array of Aois found in MongoDB
+        Server-&gt;&gt;MongoDB: Query Aois
+        MongoDB--&gt;&gt;Server: Array of Aois
+        Server--&gt;&gt;Client: Response (data)
+    else Array of Aois not found in MongoDB
+        Server--&gt;&gt;Client: Response (statuscode 404)
+    end
+</div>
+<h2 id="dev-routes">Dev-routes</h2>
+<p>plannin jutussa jotain lisää 
+endpoint: .../ndvi/api/v1/workAreasToMongo
+TEE muista vastavaksi ei parametrea ja paluuravoa vain statuscode!!!</p>
+<div class="mermaid">sequenceDiagram
+  autonumber
+  participant Frontend
+  participant Backend
+  participant MongoDb
+
+  Frontend-&gt;&gt;Backend: GET /ndvi/api/v1/workAreasToMongo
+  activate Backend
+  note right of Backend: require("../data/workareas.json")
+  alt 
+    Backend-&gt;&gt;Backend: Loop through each workarea (index i)
+      Backend-&gt;&gt;MongoDb: Insert workarea data[i]  
+      MongoDb--&gt;&gt;Backend: Acknowledge insertion
+  else Loop Done
+  deactivate Backend
+  Backend-&gt;&gt;Frontend: Status 200 (successful)
+  end
+</div>
+<h3 id="list_1">list</h3>
+<p>sentinelhub token </p>
+<h2 id="activate-keksi-jokin-muu-nimi">activate (keksi jokin muu nimi)</h2>
+<p>vaatii admin oikeudet. 
+ehtona</p>
+<p>developing route otetaan mukaan vain develop modessa
+priction modessa ko. route ei tule mukaan</p>
+<p>NDVI-controller
+ - list
+ - activate
+ - image</p>
+<p>Develop
+ -  database... 
+Erikseen on develop-route sisältäen demon datan sekä joitakin mm. database maintrenece tools</p>
+<p>Weather
+- tässä tapuksessa haetaan valitun paikkakunnan säädataa vaikka joka päivältä mitä on ollut
+- voisi näkyä ko. paikkakunnan sää joka on parhaillaan (jokin päivitys cronilla) frontille ie vitisyksiä
+  kaikki menee backendin kautta</p>
+<p>Monitoring SOCKET <br/>
+- päivityksen monitotointi  </p>
+<br/>
+</div>
+<footer class="container-fluid wm-page-content">
+<p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a> using <a href="https://github.com/gristlabs/mkdocs-windmill">Windmill</a> theme by Grist Labs.</p>
+</footer>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+mermaid.initialize({});</script><script>
+            window.update_swagger_ui_iframe_height = function (id) {
+                var iFrameID = document.getElementById(id);
+                if (iFrameID) {
+                    full_height = (iFrameID.contentWindow.document.body.scrollHeight + 80) + "px";
+                    iFrameID.height = full_height;
+                    iFrameID.style.height = full_height;
+                }
+            }
+        
+            let iframe_id_list = []
+            var iframes = document.getElementsByClassName("swagger-ui-iframe");
+            for (var i = 0; i < iframes.length; i++) { 
+                iframe_id_list.push(iframes[i].getAttribute("id"))
+            }
+        
+            let ticking = true;
+            
+            document.addEventListener('scroll', function(e) {
+                if (!ticking) {
+                    window.requestAnimationFrame(()=> {
+                        let half_vh = window.innerHeight/2;
+                        for(var i = 0; i < iframe_id_list.length; i++) {
+                            let element = document.getElementById(iframe_id_list[i])
+                            if(element==null){
+                                return
+                            }
+                            let diff = element.getBoundingClientRect().top
+                            if(element.contentWindow.update_top_val){
+                                element.contentWindow.update_top_val(half_vh - diff)
+                            }
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        </script></body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="../../img/favicon.ico" rel="shortcut icon"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<title>Overview - ytsp0200-3004 Backend for NDVI demo for agriculture</title>
+<link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet"/>
+<link href="../../css/font-awesome-4.7.0.css" rel="stylesheet"/>
+<link href="../../css/base.css" rel="stylesheet"/>
+<link href="../../css/highlight.css" rel="stylesheet"/>
+<link href="../../style.css" rel="stylesheet"/>
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+<script src="../../js/jquery-3.2.1.min.js"></script>
+<script src="../../js/bootstrap-3.3.7.min.js"></script>
+<script src="../../js/highlight.pack.js"></script>
+<base target="_top"/>
+<script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "api for NDVI-satellite images and statistics from Sentinel-hub services", url: "#_top", children: [
+              {title: "", url: "#_1" },
+          ]},
+          {title: "About technology", url: "#about-technology", children: [
+              {title: "Framework", url: "#framework" },
+              {title: "Database", url: "#database" },
+          ]},
+          {title: "MERN stack", url: "#mern-stack", children: [
+              {title: "app.js", url: "#appjs" },
+          ]},
+          {title: "api routes", url: "#api-routes", children: [
+              {title: "Sentinel-hub token", url: "#sentinel-hub-token" },
+              {title: "AOIs to MongoDB", url: "#aois-to-mongodb" },
+          ]},
+          {title: "Database", url: "#database_1", children: [
+              {title: "models", url: "#models" },
+          ]},
+          {title: "components", url: "#components", children: [
+          ]},
+          {title: "libraries", url: "#libraries", children: [
+          ]},
+          {title: "deployment", url: "#deployment", children: [
+              {title: "container", url: "#container" },
+              {title: "azure", url: "#azure" },
+              {title: "container registry", url: "#container-registry" },
+              {title: "pipeline", url: "#pipeline" },
+              {title: "Publicification", url: "#publicification" },
+              {title: "results", url: "#results" },
+              {title: "feelings", url: "#feelings" },
+              {title: "Developing", url: "#developing" },
+          ]},
+          {title: "tools", url: "#tools", children: [
+          ]},
+          {title: "02231C", url: "#02231c", children: [
+          ]},
+          {title: "004D25", url: "#004d25", children: [
+          ]},
+          {title: "0F823B", url: "#0f823b", children: [
+          ]},
+          {title: "48C053", url: "#48c053", children: [
+          ]},
+          {title: "006400", url: "#006400", children: [
+          ]},
+          {title: "228B22", url: "#228b22", children: [
+          ]},
+          {title: "2E8B57", url: "#2e8b57", children: [
+          ]},
+          {title: "556B2F", url: "#556b2f", children: [
+          ]},
+          {title: "2F4F4F", url: "#2f4f4f", children: [
+              {title: "About this document", url: "#about-this-document" },
+          ]},
+        ];
+
+    </script>
+<script src="../../js/base.js"></script>
+</meta></head>
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+<div class="container-fluid wm-page-content">
+<a name="_top"></a>
+<p>erisävyiset vihreät h1,h2,h3,h4, h5 on punainen remarks</p>
+<h2 id="api-for-ndvi-satellite-images-and-statistics-from-sentinel-hub-services">api for NDVI-satellite images and statistics from Sentinel-hub services</h2>
+<p>API</p>
+<h4 id="what-is-ndvi">What is NDVI</h4>
+<h4 id="ndvi-normalized-difference-vegetation-index">NDVI (Normalized Difference Vegetation Index)</h4>
+<h4 id="general-description">General description</h4>
+<p>The server (API) app  makes it possible to getting NDVI (Normalized Difference Vegetation Index) satellite data from sentinel hub service sentinel-2-l1c and serve it for client.
+So the farmers and agriculture peoples can see the growing situation of the plants.</p>
+<p>NDVI (Normalized Difference Vegetation Index)
+The well known and widely used NDVI is a simple, but effective index for quantifying green vegetation. It normalizes green leaf scattering in Near Infra-red wavelengths with chlorophyll absorption in red wavelengths.
+The value range of the NDVI is -1 to 1. Negative values of NDVI (values approaching -1) correspond to water. Values close to zero (-0.1 to 0.1) generally correspond to barren areas of rock, sand, or snow. Low, positive values represent shrub and grassland (approximately 0.2 to 0.4), while high values indicate temperate and tropical rainforests (values approaching 1). It is a good proxy for live green vegetation.
+Getting satellite data from sentinel hub service sentinel-2-l1c</p>
+<p><img alt="image 1" src="../../img/ndvi.jpg" width="600"/></p>
+<h3 id="_1"></h3>
+<p>requests for sentinel-hub service
+storing data and queries to database (MongoDb Atlas)
+reponses to clients from several routes </p>
+<h2 id="about-technology">About technology</h2>
+<p>restfull APIs done
+Framework
+node express mongo and react 
+MERN</p>
+<h3 id="framework">Framework</h3>
+<h3 id="database">Database</h3>
+<h2 id="mern-stack">MERN stack</h2>
+<p>copy build folder at root
+otetaan </p>
+<hr/>
+<h3 id="appjs">app.js</h3>
+<h2 id="api-routes">api routes</h2>
+<h4 id="user">user</h4>
+<p>login token-based authentication
+register
+app.use(middleware.tokenExtractor);</p>
+<h3 id="sentinel-hub-token">Sentinel-hub token</h3>
+<p>middleware huolehtiin tsekkauksesta requstien yhteydessä että on snetinelin token on elossa ja jos ei ole niin uusitaan.</p>
+<pre><code>const sentinelhubTokenMiddleware = require('../sentinelhub/sentinelhub_token');
+const router = express.Router();
+
+// Middleware for checking token
+const { checkToken } = sentinelhubTokenMiddleware;
+
+// Routes
+router.post('/list', checkToken, ndviControllers.list);
+router.post('/activate', checkToken, ndviControllers.activate);
+</code></pre>
+<h4 id="sentinel-hub">Sentinel-hub</h4>
+<p>hakemistossa kaikki liittyvä
+sentinelhub token</p>
+<h4 id="list">list</h4>
+<h4 id="image">image</h4>
+<h4 id="activate">activate</h4>
+<ul>
+<li>activate by the companyid all the aois (geometries geoJson)of the array to get ndvi-images and statsoistocs of specifig period and save data into database</li>
+</ul>
+<h4 id="weather">weather</h4>
+<h3 id="aois-to-mongodb">AOIs to MongoDB</h3>
+<h2 id="database_1">Database</h2>
+<h3 id="models">models</h3>
+<h2 id="components">components</h2>
+<h2 id="libraries">libraries</h2>
+<p>package.json</p>
+<h2 id="deployment">deployment</h2>
+<h3 id="container">container</h3>
+<h3 id="azure">azure</h3>
+<h3 id="container-registry">container registry</h3>
+<h3 id="pipeline">pipeline</h3>
+<ul>
+<li>azure-pipelines.yml</li>
+</ul>
+<h3 id="publicification">Publicification</h3>
+<p>For the result of deployment the MERN stack in a container is running on Azure web service</p>
+<h3 id="results">results</h3>
+<h3 id="feelings">feelings</h3>
+<h3 id="developing">Developing</h3>
+<h1 id="tools">tools</h1>
+<p>how to get developing environment to work/use</p>
+<h5 id="green-colors-if-you-want">green colors if you want....</h5>
+<h1 id="02231c">02231C</h1>
+<h1 id="004d25">004D25</h1>
+<h1 id="0f823b">0F823B</h1>
+<h1 id="48c053">48C053</h1>
+<h1 id="006400">006400</h1>
+<h1 id="228b22">228B22</h1>
+<h1 id="2e8b57">2E8B57</h1>
+<h1 id="556b2f">556B2F</h1>
+<h1 id="2f4f4f">2F4F4F</h1>
+<p>546E7A</p>
+<h2 id="about-this-document">About this document</h2>
+<p>this topic is pretty large to documentize for this assignment so is consentrated for some main parts tolls and test are documented in the future if needed.</p>
+<p>yleiskatsaus sama kuin intro?</p>
+<p>data päivitetään aina kun päivä on eri kuin kuluvapäivä siis tsekkaus onko uutta statistiikkaa</p>
+<p>JAMK fullstack kurssi readme. 
+kuinka kehitys 
+npm run dev</p>
+<p>For this demo the databse is filled in the the data neede for a presentation for the app idea  using/used the function tool code is made for maintenance</p>
+<p>token is needed for all functions of the app jus for use of app
+admin prop has more privolegies mainly for mainteneace and usin ghte tests and tools created.</p>
+<p>This service is for getting NDVI omages and ralated data from sentinelhub, store it to database for 
+fetching it from user interface and show and handling it.
+NDVI data is used for agriculture to monitor grain and plant growth  </p>
+<p>tähän kuvia sentinelhub</p>
+<p>What is NDVI</p>
+<p>technology used in generally
+backend node/express mongo
+frontend REACT (tästä enemmän ja tarkemmin omassa docussaan)
+Fullstack MERN</p>
+<h4 id="why-its-time-to-stop-processing-satellite-imagery-on-your-laptop">Why it’s time to stop processing satellite imagery on your laptop</h4>
+<p>https://medium.com/sentinel-hub/tk-why-its-time-to-stop-processing-satellite-imagery-on-your-laptop-a09dbf8c72c0</p>
+<p>There is codetools made for getting and upadatinf NDVi data  for specifig geometry (geojson) in specifig date range.</p>
+<p>should nbe registeed an login
+In this demo application all the data is avaialable in real world just custom data is avaialeble.</p>
+<p>test dta is for all users in this demo normaaly in real world dta is custom data fort the registered users theirs fields.</p>
+<br/>
+</div>
+<footer class="container-fluid wm-page-content">
+<p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a> using <a href="https://github.com/gristlabs/mkdocs-windmill">Windmill</a> theme by Grist Labs.</p>
+</footer>
+<script>
+            window.update_swagger_ui_iframe_height = function (id) {
+                var iFrameID = document.getElementById(id);
+                if (iFrameID) {
+                    full_height = (iFrameID.contentWindow.document.body.scrollHeight + 80) + "px";
+                    iFrameID.height = full_height;
+                    iFrameID.style.height = full_height;
+                }
+            }
+        
+            let iframe_id_list = []
+            var iframes = document.getElementsByClassName("swagger-ui-iframe");
+            for (var i = 0; i < iframes.length; i++) { 
+                iframe_id_list.push(iframes[i].getAttribute("id"))
+            }
+        
+            let ticking = true;
+            
+            document.addEventListener('scroll', function(e) {
+                if (!ticking) {
+                    window.requestAnimationFrame(()=> {
+                        let half_vh = window.innerHeight/2;
+                        for(var i = 0; i < iframe_id_list.length; i++) {
+                            let element = document.getElementById(iframe_id_list[i])
+                            if(element==null){
+                                return
+                            }
+                            let diff = element.getBoundingClientRect().top
+                            if(element.contentWindow.update_top_val){
+                                element.contentWindow.update_top_val(half_vh - diff)
+                            }
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        </script></body>
+</html>

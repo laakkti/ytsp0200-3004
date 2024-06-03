@@ -29,6 +29,11 @@
         var pageToc = [
           {title: "Azure devops pipeline", url: "#_top", children: [
           ]},
+          {title: "Pipeline", url: "#pipeline", children: [
+              {title: "Creating a pipeline", url: "#creating-a-pipeline" },
+              {title: "azure-pipelines.yml", url: "#azure-pipelinesyml" },
+              {title: "The result", url: "#the-result" },
+          ]},
         ];
 
     </script>
@@ -42,6 +47,65 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <a name="_top"></a>
 <h3 id="azure-devops-pipeline">Azure devops pipeline</h3>
 <p>https://dev.azure.com/</p>
+<h2 id="pipeline">Pipeline</h2>
+<p>Azure pipeline on Azure DevOps. </p>
+<p>pipeline is triggered  by <code>git push</code></p>
+<h3 id="creating-a-pipeline">Creating a pipeline</h3>
+<p>First the repository for Azure DevOps 
+<a href="https://dev.azure.com/" target="_blank">https://dev.azure.com/</a>
+project have to be created</p>
+<p>the source files should be pushed to the repository of Azure DevOps.</p>
+<p><strong>Step by step</strong>
+<img alt="alt text" src="../../img/pipeline.gif"/></p>
+<h3 id="azure-pipelinesyml">azure-pipelines.yml</h3>
+<p>Azure Devops generated YAML file defining pipelines for CI/CD (Continuous Integration/Continuous Deployment).</p>
+<pre><code># Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '2b2e35d0-3140-4c01-8409-9e453d42fa6f'
+  imageRepository: 'ndvi'
+  containerRegistry: 'ndvireg.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+</code></pre>
+<h3 id="the-result">The result</h3>
+<p>After deployment the application can be get in browser at address  </p>
+<p><a href="https://ndvidemo.azurewebsites.net/" target="_blank">https://ndvidemo.azurewebsites.net/</a></p>
+<p>If frontend app is included with backend the landing view is as following.
+<img alt="start" src="../../img/startview.png" width="800"/></p>
+<p>If there is not frontend app included the view of root address looks like this. 
+<img alt="start" src="../../img/backend.png" width="800"/></p>
 <br/>
 </div>
 <footer class="container-fluid wm-page-content">

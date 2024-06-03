@@ -7,7 +7,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="../../img/favicon.ico" rel="shortcut icon"/>
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-<title>Docker - ytsp0200-3004 Backend for NDVI demo for agriculture</title>
+<title>Backend copy - ytsp0200-3004 Backend for NDVI demo for agriculture</title>
 <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet"/>
 <link href="../../css/font-awesome-4.7.0.css" rel="stylesheet"/>
 <link href="../../css/base.css" rel="stylesheet"/>
@@ -38,7 +38,42 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 </script>
 <div class="container-fluid wm-page-content">
 <a name="_top"></a>
-<p>img hakemistossa kuvia</p>
+<p>nodemon mainitaan myös packages</p>
+<p>One abroach is to save geometries of client to document of users collection.
+this could be if client need data from several years. These needs can be handle by separatly from the frontend tool.</p>
+<p>Automaattinen päivitys joka vuorokausi tai heiman harvemmin vaikka joka 
+vain kasvukaudella!!!!
+kasvukauden ulkopuolella vain uudet asiskkaat saavat uutta dataa mutta tällöin sentinelhub minimi sopimus. kavukaudella tarvitaan resursseja!!!</p>
+<p>LISÄÄ komnettijokaisen metodin yläpuoleel niin että paramterit ja paluuarvo kerrotaan </p>
+<p>tehtävä päivittää databasea sentineklHub NDVi image datalla.
+palauttaa pivämmärt ja statistikkaa niiltä päiviltä haliutulla aikajäntellä jloille on ndv-dataa saatavilla
+palauttaa NDVI-image</p>
+<p>SOCKET yhtey
+Myös users colelction jossa käyttäjäkohtaiset pellot</p>
+<p>TARINA videoon
+On olemassa tietokanta, jossa on käyttäjä ei companyid kohtaiset peltogeometriat 
+nämä voidaan launchata activate routeen NDVI forntendissä testi joka ajaa monta samamakaista datasettiä ko. routeen. Samalla fronnti moni   toroi socketin kautta edistymistä kunkin comapnyIdeen kohdalla workareacount prosenntein workarea.lenght.</p>
+<p>Concurrentjuttuja list:ssä imagejen suhteen
+activate: dates &amp; statistics suhteen. </p>
+<p>Tämä demo ei ota kantaa mistä c </p>
+<p>because of need to get data as fast as possible we must speedup getiing data
+using concurrent processes axios.all will help
+Because all servers has specifig limits so sentinelhub has too for </p>
+<p>https://docs.sentinel-hub.com/api/latest/api/overview/rate-limiting/</p>
+<p>there ways to update and get the imnage related data
+update when navigatinf specifig geometry area first check from sentinel (mitkä ehdot jos tämä päivä on  uudempi kuin 
+mikä on viimeisin dates-taulussa/kollectionissa) ja muita kascukaudella!!!
+Jos in uusi AOI niin silloin ei tsekata ekana kascukautta ja hylätä "talvella" vaan jos dates-data löytyy niin on kyse pävityksestä ja sillon vain kasvukaudella.
+TESTI
+Siis geometria on avain ja haetaan dates-päivät sentineliltä jos ei ole kannassa 
+jos on kannassa niin haetaan viimeinen päiväys ja verrataan nykypäivään jos ei ole smaat 
+niin käydään hakemassa sentinelltä viimeisen dates päiväyksen ja tämän jetken välisesltä ajakta dataa.
+testaa kaukanko kestää esim. muutama päivä verratuna koko kasvukauteen hakea!!! </p>
+<p>ststus codes
+429
+??? token
+404</p>
+<p>SECRETS in .env file in developing mode in production should put the secrets service environtment variables</p>
 <br/>
 </div>
 <footer class="container-fluid wm-page-content">

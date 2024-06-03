@@ -27,8 +27,6 @@
       var is_top_frame = false;
         
         var pageToc = [
-          {title: "TEKSTI ihan puppua t\u00e4h\u00e4n kohtaan", url: "#_top", children: [
-          ]},
         ];
 
     </script>
@@ -40,14 +38,13 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 </script>
 <div class="container-fluid wm-page-content">
 <a name="_top"></a>
-<h1 id="teksti-ihan-puppua-tahan-kohtaan">TEKSTI ihan puppua tähän kohtaan</h1>
+<h4 id="activate">activate</h4>
 <p>Activate specifig aois to get NDVI-image and related statistics.
 This is just for updating database with multiple aois
 does not return any data for client, is triggered from the client.<br/>
-sama kuin list mutta array of geometries as parameter and process is different...
-is identical too list 
-but technically implemented in the code some kind of  parallel</p>
-<p>simplified, general and principled description not quite real</p>
+sama kuin list mutta array of geometries as parameter and process is different...</p>
+<p>Sequence is pretty much identical to route "list", 
+but technically implemented in the code some kind of parallel behaviour to sentonel-hub service.</p>
 <p>does not return anything jsut success 200 statuscode</p>
 <p>Retrieves/returns a list of Sentinel-hub NDVI dates with statistics and updates the database if new data is available.</p>
 <p>lisää api.md:stä usecases ja parametrit
@@ -96,7 +93,7 @@ ja paluu arvot mutta frontend docu</p>
 </table>
 <pre><code>Request body
 {   
-    "geometry": "geoJSON",
+    "geometry": array of "geoJSON",
     "start_date": "dateString",
     "end_date": "dateString"
 }
@@ -112,22 +109,13 @@ ja paluu arvot mutta frontend docu</p>
 </thead>
 <tbody>
 <tr>
-<td></td>
-<td>array</td>
-<td>All the days from which images can be queried</td>
-</tr>
-<tr>
-<td>generationtime</td>
-<td>dateString (ISO 8601)</td>
-<td>The date of the image</td>
-</tr>
-<tr>
-<td>sentinelid</td>
-<td>string</td>
-<td>generationtime and geometry converted to sha256-format, generated for the request to be used when fetching the image from database e.g. 2023-05-30T00:00:00Z_c7a5478757abfae7286751b0950e58991fa3f6ef77f77e844baba038cb86b647</td>
+<td>statuscode</td>
+<td>number</td>
+<td>200 on success, 401 when failed</td>
 </tr>
 </tbody>
 </table>
+<p><strong>Sequence diagram</strong></p>
 <div class="mermaid">sequenceDiagram
     Autonumber
     participant Client

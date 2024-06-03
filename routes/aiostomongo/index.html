@@ -38,7 +38,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 </script>
 <div class="container-fluid wm-page-content">
 <a name="_top"></a>
-<h4 id="aiostomongo">AiosToMongo</h4>
+<h4 id="aiostomongo">aiostomongo</h4>
 <p>Stores area of interest specifig data from json-format to MongoDB database triggered by client. </p>
 <pre><code>controllers/
 │   └── dev-controllers.js
@@ -67,9 +67,6 @@ router.get('/aiostomongo', devControllers.aiosToMongo);
 <p>No parameters.</p>
 <p><strong>Response</strong></p>
 <p>Statuscode 200 if successful, otherwise 404 failed</p>
-<p>plannin jutussa jotain lisää 
-endpoint: .../ndvi/api/v1/workAreasToMongo
-TEE muista vastavaksi ei parametrea ja paluuravoa vain statuscode!!!</p>
 <div class="mermaid">sequenceDiagram
   autonumber
   participant Frontend
@@ -78,6 +75,7 @@ TEE muista vastavaksi ei parametrea ja paluuravoa vain statuscode!!!</p>
 
   activate Backend
   note left of Backend: /ndvi/api/v1/aiostomongo
+  Backend -&gt;&gt; Backend: Middleware(checkToken)
   Frontend-&gt;&gt;Backend: Request
 
   note right of Backend: require("../data/workareas.json")

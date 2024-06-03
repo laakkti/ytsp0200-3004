@@ -41,9 +41,8 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <div class="container-fluid wm-page-content">
 <a name="_top"></a>
 <h3 id="the-evalscript">The Evalscript</h3>
-<p>https://medium.com/sentinel-hub/tk-why-its-time-to-stop-processing-satellite-imagery-on-your-laptop-a09dbf8c72c0</p>
-<p>This is where we perform the same analysis as above in the traditional workflow. Evalscripts are a piece of Javascript code, used to visualise satellite imagery and to control what values the Sentinel Hub services will return.</p>
-<p>In this evalscript, we have three functions:</p>
+<p>Evalscripts are a piece of Javascript code, used to visualise satellite imagery and to control what values the Sentinel Hub services will return.</p>
+<p>Evalscript, there is three functions:</p>
 <p>In function setup()we specify the required (Sentinel-2) bands as inputs and also specify the output responses with individually assigned ids. We can further customise the number of bands and the raster sampleType of each output response to your requirements. We also specify the mosaicking method Orbit. This means you are requesting the flattened mosaicked image for each orbit so that there is only one sample per pixel per orbit.</p>
 <p>With the help of preProcessScenes, we allow only data from the two defined dates to be used, and the Orbit mosaicking method is used to mosaic the two scenes that cover the AOI into a single pixel array.</p>
 <p>The third function is where pixel analysis takes place; computing NDVI for both scenes and BSI for the second scene. Lastly, the harvested formula is applied to the two indices you generated.</p>

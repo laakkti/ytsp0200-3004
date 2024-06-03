@@ -27,12 +27,6 @@
       var is_top_frame = false;
         
         var pageToc = [
-          {title: "list", url: "#_top", children: [
-          ]},
-          {title: "NEEDs token use this endpoint/route", url: "#needs-token-use-this-endpointroute", children: [
-          ]},
-          {title: "tulleeko johonkin varsinaiset kutsut sentinelhubiin (senetinelhubista oma kappale)", url: "#tulleeko-johonkin-varsinaiset-kutsut-sentinelhubiin-senetinelhubista-oma-kappale", children: [
-          ]},
         ];
 
     </script>
@@ -44,11 +38,8 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 </script>
 <div class="container-fluid wm-page-content">
 <a name="_top"></a>
-<h2 id="list">list</h2>
-<h2 id="needs-token-use-this-endpointroute">NEEDs token use this endpoint/route</h2>
+<h4 id="list">list</h4>
 <p>Retrieves/returns a list of Sentinel-hub NDVI dates with statistics and updates the database if new data is available.</p>
-<p>lisää api.md:stä usecases ja parametrit
-ja paluu arvot mutta frontend docu</p>
 <p>List the days with found images for the given geometry found in Sentinel Hub. Service should store the given geometry and the days in which the images can be found so that there would be no need to re-query the days (only newer days from the last query should be queried) every time from Sentinel Hub. If the image is available for given day then the service should assign unique id "sentinelid" for that day and image.</p>
 <table>
 <thead>
@@ -147,7 +138,8 @@ ja paluu arvot mutta frontend docu</p>
 
     activate Server
     Note left of Server: /ndvi/api/v1/list
-    Client-&gt;&gt;Server: Request (token in header)   
+    Client-&gt;&gt;Server: Request (token in header)
+    Server -&gt;&gt; Server: Middleware(checkToken)
     Server-&gt;&gt;MongoDB: Query
     MongoDB--&gt;&gt;Server: Data
 
@@ -172,12 +164,7 @@ ja paluu arvot mutta frontend docu</p>
     end
     deactivate Server
 </div>
-<p>Pitäiskö muuttaa mondoB dataBaseksi???</p>
-<p>1.
-/ndvi/api/v1/list</p>
-<ol>
-<li>if new data (statistics) is available it will be stored into the database. Also NDVI-imagedata related to all new dates will be request from SentinelHub</li>
-</ol>
+<p>if new data (statistics) is available it will be stored into the database. Also NDVI-imagedata related to all new dates will be request from SentinelHub</p>
 <p><strong>Sequence diagram</strong></p>
 <div class="mermaid">sequenceDiagram
     Autonumber
@@ -195,10 +182,6 @@ ja paluu arvot mutta frontend docu</p>
         Server-&gt;&gt;MongoDB: Store image data with statistics
     end
 </div>
-<h2 id="tulleeko-johonkin-varsinaiset-kutsut-sentinelhubiin-senetinelhubista-oma-kappale">tulleeko johonkin varsinaiset kutsut sentinelhubiin (senetinelhubista oma kappale)</h2>
-<p>api.md
-samallahan kun haetaan statistics ja sen perusteella haetaan NDVI-iamges ja tallennetaan kantaan.
-Jos kannata läytyy niin tsekataan jos löytyy uudempaa dataa sen jälkeen kuin viimeksi talllennettiin dataa.</p>
 <br/>
 </div>
 <footer class="container-fluid wm-page-content">

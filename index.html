@@ -7,7 +7,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta content="None" name="description"/>
 <link href="./img/favicon.ico" rel="shortcut icon"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 <title>ytsp0200-3004 Backend for NDVI demo for agriculture</title>
 <link href="./css/bootstrap-3.3.7.min.css" rel="stylesheet"/>
 <link href="./css/font-awesome-4.7.0.css" rel="stylesheet"/>
@@ -29,14 +29,15 @@
       var is_top_frame = (window === window.parent);
         
         var pageToc = [
-          {title: "Tools for document", url: "#_top", children: [
-              {title: "Commands", url: "#commands" },
+          {title: "API for NDVI-satellite images and statistics from Sentinel-hub services", url: "#_top", children: [
+              {title: "NDVI (Normalized Difference Vegetation Index)", url: "#ndvi-normalized-difference-vegetation-index" },
+              {title: "Why sentinel-hub", url: "#why-sentinel-hub" },
           ]},
         ];
 
     </script>
 <script src="./js/base.js"></script>
-</head>
+</meta></head>
 <body>
 <script>
 if (is_top_frame) { $('body').addClass('wm-top-page'); }
@@ -75,23 +76,21 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <div class="wm-page-top-frame" id="main-content">
 <nav class="wm-toc-pane">
 <ul class="wm-toctree">
-<li class="wm-toc-li wm-toc-lev1"><a class="wm-article-link wm-toc-text" href="">Introducion</a>
-</li>
-<li class="wm-toc-li wm-toc-lev1"><a class="wm-article-link wm-toc-text" href="intro/overview/">Overview</a>
-</li>
-<li class="wm-toc-li wm-toc-lev1"><a class="wm-article-link wm-toc-text" href="auth/authentication/">Authentication</a>
+<li class="wm-toc-li wm-toc-lev1"><a class="wm-article-link wm-toc-text" href="">Introduction</a>
 </li>
 <li class="wm-toc-li wm-toc-lev1 wm-toc-opener"><span class="wm-toc-text">Sentinel-hub</span>
 </li>
 <li class="wm-toc-li-nested collapse">
 <ul class="wm-toctree">
-<li class="wm-toc-li wm-toc-lev2"><a class="wm-article-link wm-toc-text" href="sentinelhub/overview.md">Overview</a>
+<li class="wm-toc-li wm-toc-lev2"><a class="wm-article-link wm-toc-text" href="sentinelhub/sentinelhub/">Overview</a>
+</li>
+<li class="wm-toc-li wm-toc-lev2"><a class="wm-article-link wm-toc-text" href="sentinelhub/evalscript/">Evalscript</a>
 </li>
 <li class="wm-toc-li wm-toc-lev2"><a class="wm-article-link wm-toc-text" href="misc/env/">Environment variables</a>
 </li>
 <li class="wm-toc-li wm-toc-lev2"><a class="wm-article-link wm-toc-text" href="sentinelhub/sentinelhub_auth/">Authentication</a>
 </li>
-<li class="wm-toc-li wm-toc-lev2 wm-toc-opener"><span class="wm-toc-text">Main methods</span>
+<li class="wm-toc-li wm-toc-lev2 wm-toc-opener"><span class="wm-toc-text">Main modules/methods</span>
 </li>
 <li class="wm-toc-li-nested collapse">
 <ul class="wm-toctree">
@@ -157,9 +156,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 </li>
 <li class="wm-toc-li-nested collapse">
 <ul class="wm-toctree">
-<li class="wm-toc-li wm-toc-lev3"><a class="wm-article-link wm-toc-text" href="mongodb.md">MongoDb Atlas</a>
-</li>
-<li class="wm-toc-li wm-toc-lev3"><a class="wm-article-link wm-toc-text" href="misc/env/">Environment variables</a>
+<li class="wm-toc-li wm-toc-lev3"><a class="wm-article-link wm-toc-text" href="env/">Environment variable</a>
 </li>
 <li class="wm-toc-li wm-toc-lev3 wm-toc-opener"><span class="wm-toc-text">Models</span>
 </li>
@@ -175,7 +172,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 </li>
 </ul>
 </li>
-<li class="wm-toc-li wm-toc-lev3"><a class="wm-article-link wm-toc-text" href="database/mongodb_js/">API(mongodb.js)</a>
+<li class="wm-toc-li wm-toc-lev3"><a class="wm-article-link wm-toc-text" href="database/mongodb_js/">API (mongodb.js)</a>
 </li>
 </ul>
 </li>
@@ -189,10 +186,6 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 </li>
 <li class="wm-toc-li wm-toc-lev1"><a class="wm-article-link wm-toc-text" href="development/development/">Development</a>
 </li>
-<li class="wm-toc-li wm-toc-lev1"><a class="wm-article-link wm-toc-text" href="risks_and_challenges/risks_and_challenges/">Risks and challenges</a>
-</li>
-<li class="wm-toc-li wm-toc-lev1"><a class="wm-article-link wm-toc-text" href="results/results/">Results</a>
-</li>
 </ul>
 </nav>
 <div class="wm-content-pane">
@@ -201,25 +194,15 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 </div>
 <div class="container-fluid wm-page-content">
 <a name="_top"></a>
-<h1 id="tools-for-document">Tools for document</h1>
-<p>mkdocks, markdown, </p>
-<p>mermaid for diagrams
-https://github.com/mermaid-js/mermaid</p>
-<p>For full documentation visit <a href="https://www.mkdocs.org">mkdocs.org</a>.</p>
-<h2 id="commands">Commands</h2>
-<ul>
-<li><code>mkdocs new [dir-name]</code> - Create a new project.</li>
-<li><code>mkdocs serve</code> - Start the live-reloading docs server.</li>
-<li><code>mkdocs build</code> - Build the documentation site.</li>
-<li><code>mkdocs -h</code> - Print help message and exit.</li>
-</ul>
-<h3 id="project-layout">Project layout</h3>
-<pre><code>mkdocs.yml    # The configuration file.
-docs/
-    index.md  # The documentation homepage.
-    ...       # Other markdown pages, images and other files.
-</code></pre>
-<h4 id="documentation">Documentation</h4>
+<h2 id="api-for-ndvi-satellite-images-and-statistics-from-sentinel-hub-services">API for NDVI-satellite images and statistics from Sentinel-hub services</h2>
+<p>This RESTful API makes it possible to getting NDVI (Normalized Difference Vegetation Index) satellite data from sentinel-hub service sentinel-2-l1c and serve it for client.
+So the e.g. farmers and agriculture peoples can see the growing situation of the plants.</p>
+<h3 id="ndvi-normalized-difference-vegetation-index">NDVI (Normalized Difference Vegetation Index)</h3>
+<p>The well known and widely used NDVI is a simple, but effective index for quantifying green vegetation. It normalizes green leaf scattering in Near Infra-red wavelengths with chlorophyll absorption in red wavelengths.
+The value range of the NDVI is -1 to 1. Negative values of NDVI (values approaching -1) correspond to water. Values close to zero (-0.1 to 0.1) generally correspond to barren areas of rock, sand, or snow. Low, positive values represent shrub and grassland (approximately 0.2 to 0.4), while high values indicate temperate and tropical rainforests (values approaching 1). It is a good proxy for live green vegetation.</p>
+<p><img alt="image 1" src="img/ndvi.jpg" width="600"/></p>
+<h3 id="why-sentinel-hub">Why sentinel-hub</h3>
+<p><a href="https://medium.com/sentinel-hub/tk-why-its-time-to-stop-processing-satellite-imagery-on-your-laptop-a09dbf8c72c0/" target="_blank">Why it’s time to stop processing satellite imagery on your laptop</a></p>
 <br/>
 </div>
 <footer class="container-fluid wm-page-content">
@@ -266,5 +249,5 @@ docs/
 </html>
 <!--
 MkDocs version : 1.5.3
-Build Date UTC : 2024-06-01 02:35:58.662942+00:00
+Build Date UTC : 2024-06-03 09:35:21.346041+00:00
 -->

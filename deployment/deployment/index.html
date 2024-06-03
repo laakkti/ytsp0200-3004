@@ -36,12 +36,8 @@
               {title: "Azure Web App", url: "#azure-web-app" },
               {title: "Continuous Deployment", url: "#continuous-deployment" },
               {title: "Updating changes", url: "#updating-changes" },
-              {title: "Testing Docker image in local on Docker Desktop", url: "#testing-docker-image-in-local-on-docker-desktop" },
           ]},
           {title: "Pipeline", url: "#pipeline", children: [
-              {title: "Creating a pipeline", url: "#creating-a-pipeline" },
-              {title: "azure-pipelines.yml", url: "#azure-pipelinesyml" },
-              {title: "The result", url: "#the-result" },
           ]},
         ];
 
@@ -55,28 +51,14 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <div class="container-fluid wm-page-content">
 <a name="_top"></a>
 <h2 id="deployment">Deployment</h2>
-<p>In this case the app is deployed to Azure webservice as an container.
-now the MERN Stack runs on container in Azure web service...</p>
-<p>!!!! frontend lisätään build ja serverille static asetus</p>
-<p>HUOM selaimessa PWA asennus</p>
-<p>LISÄÄÄ
-frontend
-build folder to the root of the server code</p>
+<p>The app is deployed to Azure web service as an container.
+For the MERN-stack frontend code is builded and added to root of backend code. </p>
 <p>app.js</p>
 <p><code>app.use(express.static("build"));</code></p>
-<p>// If the URL contains 'login' or 'register', pass without token validation
-  if (url === '/' || url.includes('login') || url.includes('register')) {
-      return next();
-  }</p>
 <h3 id="the-idea">The idea</h3>
-<p>The idea is containerize an application </p>
-<p>(Azure web app container /-register)</p>
-<p><img alt="image 1" src="../../img/docker.jpg" width="300"/></p>
-<p><img alt="image 1" src="../../img/docker2.jpg" width="300"/></p>
-<p>https://portal.azure.com/</p>
-<p>laakkti@outlook.com
-https://portal.azure.com/#@laakktioutlook.onmicrosoft.com/resource/subscriptions/08680159-3a33-4f02-a0f1-1b648e13f8a5/resources</p>
-<p>tähän vois tulla anmation gif koko jutusta</p>
+<p>The idea of containerizing an application </p>
+<p><img alt="image 1" src="../../img/docker.jpg" style="display: block; margin: 0;" width="300"/></p>
+<p><img alt="image 1" src="../../img/docker2.jpg" style="display: block; margin: 0;" width="300"/></p>
 <h3 id="dockerfile">Dockerfile</h3>
 <pre><code>FROM node:18
 COPY . . 
@@ -84,20 +66,22 @@ RUN npm install
 CMD ["npm", "start"]
 </code></pre>
 <h4 id="dockerignore">.dockerignore</h4>
-<p>.node_modules</p>
+<pre><code>.node_modules
+</code></pre>
 <h3 id="container-registry">Container Registry</h3>
-<p><img alt="image 1" src="../../img/registry_1.png" width="300"/>
-<img alt="image 1" src="../../img/registry_2.png" width="300"/>
-<img alt="image 1" src="../../img/registry_3.png" width="300"/></p>
-<p>Registry name (Username): ndvireg 
+<p><a href="https://portal.azure.com/" target="_blank">https://portal.azure.com/</a></p>
+<p><img alt="registry" src="../../img/registry_1.png" style="display: block; margin: 0;" width="400"/>
+<img 400"="" alt="registry width=" src="../../img/registry_2.png" style="display: block; margin: 0;"/>
+<img alt="registry" src="../../img/registry_3.png" style="display: block; margin: 0;" width="400"/></p>
+<pre><code>Registry name (Username): ndvireg 
 Login server: ndvireg.azurecr.io
 password:  Tm9qFwxVD4/DSPi3LmEomsuvW9NDOUlb8f1/Rtp7t3+ACRApVSqe
-password2: 7+aJFEG6LSKQYgic1rueERF7FKEtCHsfgHUy1FqfUM+ACRCBU4qY</p>
+password2: 7+aJFEG6LSKQYgic1rueERF7FKEtCHsfgHUy1FqfUM+ACRCBU4qY
+</code></pre>
 <pre><code>docker login ndvireg.azurecr.io
 Username: ndvireg
 Password: Tm9qFwxVD4/DSPi3LmEomsuvW9NDOUlb8f1/Rtp7t3+ACRApVSqe
 </code></pre>
-<p><img alt="image 1" src="../../img/registry_4.png" width="300"/></p>
 <h3 id="building-the-docker-image">Building the Docker Image</h3>
 <pre><code>docker build -t ndvireg.azurecr.io/ndvidemo:latest .
 </code></pre>
@@ -109,7 +93,6 @@ Password: Tm9qFwxVD4/DSPi3LmEomsuvW9NDOUlb8f1/Rtp7t3+ACRApVSqe
 <p>To push the image from your local to the Azure Container Registry</p>
 <pre><code>docker push ndvireg.azurecr.io/ndvidemo:latest
 </code></pre>
-<p><img alt="image 1" src="../../img/registry_5.png" width="300"/></p>
 <p><img alt="image 1" src="../../img/registry_6.png" width="300"/></p>
 <h3 id="azure-web-app">Azure Web App</h3>
 <p>Hosting the container from register</p>
@@ -124,28 +107,20 @@ Password: Tm9qFwxVD4/DSPi3LmEomsuvW9NDOUlb8f1/Rtp7t3+ACRApVSqe
 </code></pre>
 <pre><code>docker push ndvireg.azurecr.io/ndvidemo:latest
 </code></pre>
-<h5 id="remarks-tee-tyyli-punaisella">REMARKS (tee tyyli punaisella!!!)</h5>
-<p>!!!!!!!!!
-ei aina päivity!!!! joten container registryn repository deletetoitava sekä jos kus serveri päivityksen jälkeen käynnistettävä!!!</p>
-<p><img alt="image 1" src="../../img/ndvireg_repository.png" width="600"/></p>
-<p>Container registry
-ndvireg | Repositories  DELETE </p>
-<h3 id="testing-docker-image-in-local-on-docker-desktop">Testing Docker image in local on Docker Desktop</h3>
-<p>tai sitten vaan komento riviltä run ...</p>
-<p>E:\YAMK\ytsp0200-3004\backend_doc\docs\img</p>
+<h5 id="remarks">REMARKS</h5>
+<p>For some reason the containr registry not always to be updated, so repository nee to be removed before docker push operation.</p>
+<p><img alt="image 1" src="../../img/ndvireg_repository.png" width="800"/></p>
 <h2 id="pipeline">Pipeline</h2>
-<p>Azure pipeline on Azure DevOps. 
-Pipeline is more advanced for deployment </p>
+<p>Azure pipeline on Azure DevOps. </p>
 <p>pipeline is triggered  by <code>git push</code></p>
-<h3 id="creating-a-pipeline">Creating a pipeline</h3>
-<p>First the repository for Azure DevOps 
-<a href="https://dev.azure.com/" target="_blank">https://dev.azure.com/</a>
-project have to be created</p>
-<p>the source files should be pushed to the repository of Azure DevOps.</p>
+<h4 id="creating-a-pipeline">Creating a pipeline</h4>
+<p>First create a project for Azure DevOps</p>
+<p><a href="https://dev.azure.com/" target="_blank">https://dev.azure.com/</a></p>
+<p>The source files should be pushed to the repository of the project.</p>
 <p><strong>Step by step</strong>
 <img alt="alt text" src="../../img/pipeline.gif"/></p>
-<h3 id="azure-pipelinesyml">azure-pipelines.yml</h3>
-<p>Azure Devops generated YAML file defining pipelines for CI/CD (Continuous Integration/Continuous Deployment).</p>
+<h4 id="azure-pipelinesyml">azure-pipelines.yml</h4>
+<p>Azure Devops generates YAML file defining pipelines for CI/CD (Continuous Integration/Continuous Deployment).</p>
 <pre><code># Docker
 # Build and push an image to Azure Container Registry
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
@@ -186,26 +161,13 @@ stages:
         tags: |
           $(tag)
 </code></pre>
-<h3 id="the-result">The result</h3>
+<h4 id="the-result">The result</h4>
 <p>After deployment the application can be get in browser at address  </p>
 <p><a href="https://ndvidemo.azurewebsites.net/" target="_blank">https://ndvidemo.azurewebsites.net/</a></p>
 <p>If frontend app is included with backend the landing view is as following.
 <img alt="start" src="../../img/startview.png" width="800"/></p>
 <p>If there is not frontend app included the view of root address looks like this. 
 <img alt="start" src="../../img/backend.png" width="800"/></p>
-<!--![alt text](../../img/ndviautoplay.gif)-->
-<!--
-<img src="../../img/pipe_1.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
-<img src="../../img/pipe_2.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
-<img src="../../img/pipe_3.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
-<img src="../../img/pipe_4.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
-<img src="../../img/pipe_5.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
-<img src="../../img/pipe_6.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
-<img src="../../img/pipe_7.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
-<img src="../../img/pipe_8.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
-<img src="../../img/pipe_9.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
-<img src="../../img/pipe_10.png" alt="image 1" width="800" style="display: block; margin: 0;"/>
-<img src="../../img/pipe_11.png" alt="image 1" width="800" style="display: block; margin: 0;"/>-->
 <br/>
 </div>
 <footer class="container-fluid wm-page-content">

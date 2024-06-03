@@ -38,7 +38,8 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 </script>
 <div class="container-fluid wm-page-content">
 <a name="_top"></a>
-<p>Returns array of aios.</p>
+<h4 id="aios">aios</h4>
+<p>Returns array of AOIs.</p>
 <pre><code>controllers/
 │   └── ndvi-controllers.js
 │        └── aois 
@@ -106,6 +107,7 @@ router.post('/aois', ndviControllers.aois);
 
     activate Server
     Note left of Server: /ndvi/api/v1/aois
+    Server -&gt;&gt; Server: Middleware(checkToken)
     Client-&gt;&gt;Server: Request
     alt Array of Aois found in MongoDB
         Server-&gt;&gt;MongoDB: Query Aois

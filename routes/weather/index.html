@@ -38,6 +38,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 </script>
 <div class="container-fluid wm-page-content">
 <a name="_top"></a>
+<h4 id="weather">weather</h4>
 <pre><code>controllers/
 │   └── ndvi-controllers.js
 │        └── weather 
@@ -149,8 +150,9 @@ router.post('/weather', ndviControllers.weather);
     participant Server as Server: weather
     participant OpenWeatherMap
 
-    activate Server
+    activate Server    
     Note left of Server: /ndvi/api/v1/weather
+    Server -&gt;&gt; Server: Middleware(checkToken)
     Client-&gt;&gt;Server: Request
     alt Topic is current
         Server-&gt;&gt;OpenWeatherMap: Request (https://api.openweathermap.org)

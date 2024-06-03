@@ -27,12 +27,6 @@
       var is_top_frame = false;
         
         var pageToc = [
-          {title: "Image", url: "#_top", children: [
-          ]},
-          {title: "KAAVIOSTA puuttuu token in header pit\u00e4isk\u00e4 vaan manita Request(token in header) kuten frontin dokussa", url: "#kaaviosta-puuttuu-token-in-header-pitaiska-vaan-manita-requesttoken-in-header-kuten-frontin-dokussa", children: [
-          ]},
-          {title: "pit\u00e4is olla oikeastaan vuokaavio ti structure tms. josskain mongodb.js-\u0026gt; image ehk\u00e4 mongodb kappaleeseen", url: "#pitais-olla-oikeastaan-vuokaavio-ti-structure-tms-josskain-mongodbjs-image-ehka-mongodb-kappaleeseen", children: [
-          ]},
         ];
 
     </script>
@@ -44,7 +38,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 </script>
 <div class="container-fluid wm-page-content">
 <a name="_top"></a>
-<h2 id="image">Image</h2>
+<h4 id="image">image</h4>
 <p>Returns the NDVI image with statictics for the given sentinelid.</p>
 <pre><code>controllers/
 │   └── ndvi-controllers.js
@@ -247,8 +241,6 @@ router.get('/image/:sentinelid', ndviControllers.image);
     ]
 }
 </code></pre>
-<h2 id="kaaviosta-puuttuu-token-in-header-pitaiska-vaan-manita-requesttoken-in-header-kuten-frontin-dokussa">KAAVIOSTA puuttuu token in header pitäiskä vaan manita Request(token in header) kuten frontin dokussa</h2>
-<h2 id="pitais-olla-oikeastaan-vuokaavio-ti-structure-tms-josskain-mongodbjs-image-ehka-mongodb-kappaleeseen">pitäis olla oikeastaan vuokaavio ti structure tms. josskain mongodb.js-&gt; image ehkä mongodb kappaleeseen</h2>
 <p><strong>Sequence diagram</strong></p>
 <div class="mermaid">sequenceDiagram
     Autonumber
@@ -259,6 +251,7 @@ router.get('/image/:sentinelid', ndviControllers.image);
     activate Server
     Note left of Server: /ndvi/api/v1/image
     Client-&gt;&gt;Server: Request (token in header)
+    Server -&gt;&gt; Server: Middleware(checkToken)
     alt Image data found in MongoDB
         Server-&gt;&gt;MongoDB: Query for image data
         MongoDB--&gt;&gt;Server: Image data

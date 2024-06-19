@@ -261,16 +261,6 @@ router.get('/image/:sentinelid', ndviControllers.image);
     end
     deactivate Server
 </div>
-<div class="mermaid">sequenceDiagram
-    Client-&gt;&gt;+NDVI: image 
-    alt no image available for sentinelid
-        NDVI-&gt;&gt;Client: 404 Not found
-    else
-        NDVI-&gt;&gt;-Client: 200 OK
-    end
-
-</div>
-<p>MARK:notice::: in case of 404 there is sometring error situation on front end or database is corrupted. Will happen very rarely or never but in testinf/developing situations.  </p>
 <br/>
 </div>
 <footer class="container-fluid wm-page-content">
